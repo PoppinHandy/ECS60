@@ -39,5 +39,6 @@ void BTree::print()
 
 
 void BTree::remove(int value)
-{  // To be written by students
+{  
+  root -> remove(value);
 } // BTree::remove()

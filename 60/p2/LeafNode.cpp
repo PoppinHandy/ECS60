@@ -123,6 +123,29 @@ void LeafNode::print(Queue <BTreeNode*> &queue)
 
 LeafNode* LeafNode::remove(int value)
 {   // To be written by students
+  if (count >= leafSize/2){
+    /*
+      W/o borrowing: Find the value in the array, delete value, then re-sort array
+    */
+    for (int i = 0; i < count; i++){
+      if (value == values[i]){
+	if (i == count - 1){         //if deleted value is at the end of the list
+	  count--;
+	  return NULL;
+	}else{
+	  for (int j = i; j < count; j++){
+	    values[j] = values[j+1];
+	    //cout << "Remove called: " << values[j] << endl;
+	  }//end for
+	  count --;
+	  return NULL;
+	}//end else
+      }//end value == values if
+    }//end for
+  }else if (count < leafSize/2){
+    if(leftSibling && leftSibling -> getCount() > leafSize/2)
+  }//end else if
+    
   return NULL;  // filler for stub
 }  // LeafNode::remove()
 
@@ -131,7 +154,6 @@ LeafNode* LeafNode::remove(int value)
 LeafNode* LeafNode::split(int value, int last)
 {
   LeafNode *ptr = new LeafNode(leafSize, parent, this, rightSibling);
-
 
   if(rightSibling)
     rightSibling->setLeftSibling(ptr);
