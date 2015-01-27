@@ -8,7 +8,7 @@ using namespace std;
 
 
 LeafNode::LeafNode(int LSize, InternalNode *p,
-  BTreeNode *left, BTreeNode *right) : BTreeNode(LSize, p, left, right)
+		   BTreeNode *left, BTreeNode *right) : BTreeNode(LSize, p, left, right)
 {
   values = new int[LSize];
 }  // LeafNode()
@@ -23,7 +23,7 @@ void LeafNode::addToLeft(int value, int last)
   values[count - 1] = last;
   if(parent)
     parent->resetMinimum(this);
-} // LeafNode::ToLeft()
+} // LeafNode::ToLeft)
 
 void LeafNode::addToRight(int value, int last)
 {
@@ -38,7 +38,7 @@ void LeafNode::addToThis(int value)
   int i;
 
   for(i = count - 1; i >= 0 && values[i] > value; i--)
-      values[i + 1] = values[i];
+    values[i + 1] = values[i];
 
   values[i + 1] = value;
   count++;
@@ -55,14 +55,14 @@ void LeafNode::addValue(int value, int &last)
   if(value > values[count - 1])
     last = value;
   else
-  {
-    last = values[count - 1];
+    {
+      last = values[count - 1];
 
-    for(i = count - 2; i >= 0 && values[i] > value; i--)
-      values[i + 1] = values[i];
-    // i may end up at -1
-    values[i + 1] = value;
-  }
+      for(i = count - 2; i >= 0 && values[i] > value; i--)
+	values[i + 1] = values[i];
+      // i may end up at -1
+      values[i + 1] = value;
+    }
 } // LeafNode:: addValue()
 
 
@@ -90,24 +90,24 @@ LeafNode* LeafNode::insert(int value)
   int last;
 
   if(count < leafSize)
-  {
-    addToThis(value);
-    return NULL;
-  } // if room for value
+    {
+      addToThis(value);
+      return NULL;
+    } // if room for value
 
   addValue(value, last);
 
   if(leftSibling && leftSibling->getCount() < leafSize)
-  {
-    addToLeft(value, last);
-    return NULL;
-  }
-  else // left sibling full or non-existent
-    if(rightSibling && rightSibling->getCount() < leafSize)
     {
-      addToRight(value, last);
+      addToLeft(value, last);
       return NULL;
     }
+  else // left sibling full or non-existent
+    if(rightSibling && rightSibling->getCount() < leafSize)
+      {
+	addToRight(value, last);
+	return NULL;
+      }
     else // both siblings full or non-existent
       return split(value, last);
 }  // LeafNode::insert()
@@ -132,7 +132,8 @@ LeafNode* LeafNode::remove(int value)
 	if (i == count - 1){         //if deleted value is at the end of the list
 	  count--;
 	  return NULL;
-	}else{
+	}
+	else{
 	  for (int j = i; j < count; j++){
 	    values[j] = values[j+1];
 	    //cout << "Remove called: " << values[j] << endl;
@@ -141,33 +142,58 @@ LeafNode* LeafNode::remove(int value)
 	  return NULL;
 	}//end else
       }//end value == values if
-    }//end for
-  }else if (count < leafSize/2){
-    if(leftSibling && leftSibling -> getCount() > leafSize/2)
-  }//end else if
+      //end for
+      else if (count < leafSize/2){
+	// takes the maximum value of the left leaf and puts it at the top of the array, then deletes the value from the left leaf recursively
+	if (leftSibling != NULL) {
+	  for (int i = 0; i < count; ++i) {
+	    values[i] = values[i+1]; //shift index for new value
+	  } //end for
+	  values[0] = leftSibling->getMaximum();
+	  count++;
+	  leftSibling->remove(leftSibling->getMaximum()); //remove the value
+	  return NULL;
+	} //end if
+	else if (rightSibling != NULL && leftSibling == NULL) {
+	  // takes the minimum of the right leaf and puts it at the end of the array, then deletes the value from the right leaf recursively
+	  for (int i = 0; i < count; ++i) {
+	    values[i+1] = values[i]; //shift index for new value
+	  }//end for
+	  values[count] = rightSibling->getMinimum(); //set the last element as the minimum of the right leaf
+	  count++;
+	  rightSibling->remove(rightSibling->getMinimum()); //remove the value
+	  return NULL;
+	}//end else if
+      } //end else if
     
-  return NULL;  // filler for stub
-}  // LeafNode::remove()
+      // if(leftSibling && leftSibling->getCount() > leafSize/2)
+      //   }//end else if
+    
+      return NULL;  // filler for stub
+    }  // LeafNode::remove()
+  }
+}
 
 
 
-LeafNode* LeafNode::split(int value, int last)
-{
-  LeafNode *ptr = new LeafNode(leafSize, parent, this, rightSibling);
+  LeafNode* LeafNode::split(int value, int last)
+  {
+    LeafNode *ptr = new LeafNode(leafSize, parent, this, rightSibling);
 
-  if(rightSibling)
-    rightSibling->setLeftSibling(ptr);
+    if(rightSibling)
+      rightSibling->setLeftSibling(ptr);
 
-  rightSibling = ptr;
+    rightSibling = ptr;
 
-  for(int i = (leafSize + 1) / 2; i < leafSize; i++)
-    ptr->values[ptr->count++] = values[i];
+    for(int i = (leafSize + 1) / 2; i < leafSize; i++)
+      ptr->values[ptr->count++] = values[i];
 
-  ptr->values[ptr->count++] = last;
-  count = (leafSize + 1) / 2;
+    ptr->values[ptr->count++] = last;
+    count = (leafSize + 1) / 2;
 
-  if(value == values[0] && parent)
-    parent->resetMinimum(this);
-  return ptr;
-} // LeafNode::split()
+    if(value == values[0] && parent)
+      parent->resetMinimum(this);
+    return ptr;
+  } // LeafNode::split()
 
+    
