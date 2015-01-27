@@ -179,6 +179,15 @@ void InternalNode::print(Queue <BTreeNode*> &queue)
 
 BTreeNode* InternalNode::remove(int value)
 {  // to be written by students
+  BTreeNode *ptr;
+  for (int i = 0; i < count; i++){
+    if (keys [i] > value){
+      ptr = children [i-1] -> remove(value);
+    }
+  }//end for
+  if(!ptr){
+    return NULL;
+  }//end if
   return NULL; // filler for stub
 } // InternalNode::remove(int value)
 
