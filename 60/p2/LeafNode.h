@@ -13,6 +13,7 @@ public:
   void addToRight(int value, int last);
   void addToThis(int value);
   void addValue(int value, int &last);
+  void removeThis(int value);
   int getMaximum() const;
   int getMinimum() const;
   LeafNode* insert(int value); // returns pointer to new Leaf if splits
