@@ -142,7 +142,6 @@ LeafNode* LeafNode::remove(int value)
 	for (int i = 0; i < count; i ++){
 	  leftSibling -> insert(values[i]);
 	}
-	parent -> resetMinimum (this);
 	count = 0;
 	return this; //returns non-NULL so parent knows to delete
       }
@@ -159,7 +158,6 @@ LeafNode* LeafNode::remove(int value)
 	  rightSibling -> insert(values[i]);
 	}
 	count = 0;
-	parent -> resetMinimum(this);
 	return this; //returns non-NULL so parent knows to delete
       }//end inner else if
       return NULL;
