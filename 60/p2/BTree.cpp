@@ -15,12 +15,12 @@ void BTree::insert(const int value)
 {
   BTreeNode *ptr = root->insert(value);
   if(ptr) // root split
-  {
-    InternalNode *IPtr = new InternalNode(internalSize, leafSize,
-      NULL, NULL, NULL);
-    IPtr->insert(root, ptr);
-    root = IPtr;
-  } // if root split
+    {
+      InternalNode *IPtr = new InternalNode(internalSize, leafSize,
+					    NULL, NULL, NULL);
+      IPtr->insert(root, ptr);
+      root = IPtr;
+    } // if root split
 } // BTree::insert()
 
 
@@ -31,14 +31,20 @@ void BTree::print()
 
   queue.enqueue(root);
   while(!queue.isEmpty())
-  {
-    BTreeNodePtr = queue.dequeue();
-    BTreeNodePtr->print(queue);
-  } // while
+    {
+      BTreeNodePtr = queue.dequeue();
+      BTreeNodePtr->print(queue);
+    } // while
 } // BTree::print()
 
 
 void BTree::remove(int value)
-{  
-  root -> remove(value);
+{
+  BTreeNode *ptr;
+  
+  ptr = root->remove(value);
+  if (ptr && dynamic_cast<InternalNode*>(root)) {
+    delete root;
+    root = ptr;
+  }
 } // BTree::remove()
