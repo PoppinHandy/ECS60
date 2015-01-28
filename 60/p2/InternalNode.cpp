@@ -183,20 +183,38 @@ BTreeNode* InternalNode::remove(int value)
   for (int i = 0; i < count; i++){
     if (i == 0 && keys[i] >=value ){
       ptr = children [i] -> remove(value);
+      resetMinimum(children[i]);
     }else if (keys[i] > value){
       ptr = children [i-1] -> remove (value);
-      keys[i - 1] = children[i - 1] -> getMinimum();
+      //keys[i - 1] = children[i - 1] -> getMinimum();
+      resetMinimum(children[i-1]);
     }else if(keys [i] == value){
       ptr = children [i] -> remove(value);
-      keys[i] = children[i] -> getMinimum();
+      //keys[i] = children[i] -> getMinimum();
+      resetMinimum(children[i]);
     }else if (i == count - 1 && value >= keys[i]){
       ptr = children [i] -> remove(value);
-      keys[i] = children[i] -> getMinimum();
+      //keys[i] = children[i] -> getMinimum();
+      resetMinimum(children[i]);
     }//end else if
   }//end for
   if(!ptr){
     return NULL;
-  }//end if
+  }else{
+    for (int i = 0; i < count; i++){
+      if (ptr == children [i]){
+	if(i == count - 1){
+	  count --;
+	}else{
+	  for (int j = i; j < count; j++){
+	      keys [j] = keys[j+1];
+	      children [j] = children [j+1];
+	    }//end for
+	  count --;
+	}//end else
+      }//end if
+    }//end for
+  }//end outermost else
   return NULL; // filler for stub
 } // InternalNode::remove(int value)
 
