@@ -181,22 +181,58 @@ BTreeNode* InternalNode::remove(int value)
 {  // to be written by students
   BTreeNode *ptr;
   for (int i = 0; i < count; i++){
-    if (keys [i] > value){
-      ptr = children [i-1] -> remove(value);
-    }else if (i == 0 && keys [i] >= value){
-      ptr = children [i] -> remove (value);
+    if (i == 0 && keys[i] >=value ){
+      ptr = children [i] -> remove(value);
+      resetMinimum(children[i]);
+      break;
+    }else if (keys[i] > value){
+      ptr = children [i-1] -> remove (value);
+      resetMinimum(children[i-1]);
+      break;
     }else if(keys [i] == value){
       ptr = children [i] -> remove(value);
+      resetMinimum(children[i]);
+      break;
     }else if (i == count - 1 && value >= keys[i]){
       ptr = children [i] -> remove(value);
+      resetMinimum(children[i]);
+      break;
     }//end else if
   }//end for
   if(!ptr){
+    //cout << "NULL"<<endl;
     return NULL;
-  }//end if
+  }else{
+    this -> removeThis(value);
+    if (count >= (internalSize + 1)/2){
+      return NULL;
+    }else if (count < (internalSize + 1)/2){
+      //if can borrow
+      if (leftSibling -> getCount() > (internalSize+1)/2){
+	this -> insert (leftSibling -> getMaximum());
+	leftSibling -> remove(getMaximum());
+      }
+
+  }//end outermost else
   return NULL; // filler for stub
 } // InternalNode::remove(int value)
 
+void InternalNode::removeThis(int value){
+  //cout << "Ptr returned not null" << endl;
+    for (int i = 0; i < count; i++){
+      if (ptr == children [i]){
+	if(i == count - 1){
+	  count --;
+	}else{
+	  for (int j = i; j < count; j++){
+	      keys [j] = keys[j+1];
+	      children [j] = children [j+1];
+	    }//end for
+	  count --;
+	}//end else
+      }//end if
+    }//end for
+}//end removeThis
 
 void InternalNode::resetMinimum(const BTreeNode* child)
 {

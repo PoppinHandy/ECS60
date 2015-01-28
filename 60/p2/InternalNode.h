@@ -15,6 +15,7 @@ public:
   void addToLeft(BTreeNode *last);
   void addToRight(BTreeNode *ptr, BTreeNode *last);
   void addToThis(BTreeNode *ptr, int pos); // pos is where the node should go
+  void removeThis(int value);
   int getMaximum() const;
   int getMinimum() const;
   InternalNode* insert(int value); // returns pointer to new
