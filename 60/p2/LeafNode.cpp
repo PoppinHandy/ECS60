@@ -134,27 +134,14 @@ LeafNode* LeafNode::remove(int value)
     // takes the maximum value of the left leaf and puts it at the top of the array, then deletes the value from the left leaf recursively
     if (leftSibling != NULL) {
 	  
-      /*for (int i = 0; i < count; ++i) {
-	values[i] = values[i+1]; //shift index for new value
-	} //end for*/
-	  
       this -> insert (leftSibling -> getMaximum());
-      //cout << "count is: " << count << endl;
-      //count ++;
-      //values[0] = leftSibling->getMaximum();
       leftSibling->remove(getMaximum()); //remove the value
       return NULL;
     } //end if
-    else if (rightSibling != NULL && leftSibling == NULL) {
-      // takes the minimum of the right leaf and puts it at the end of the array, then deletes the value from the right leaf recursively
-      /*for (int i = 0; i < count; ++i) {
-	values[i] = values[i + 1]; //shift index for new value
-	}//end for*/
+    else if (rightSibling != NULL) {
+      cout << "Entered right side" << endl;
       this -> insert(rightSibling -> getMinimum());
-      //values[count] = rightSibling->getMinimum(); //set the last element as the minimum of the right leaf
-      //count ++;
-      cout << "count is " << count << endl;
-      rightSibling->remove(getMaximum()); //remove the value
+      rightSibling->remove(getMinimum()); //remove the value
       return NULL;
     }//end else if
   } //end else if

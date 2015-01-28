@@ -189,7 +189,7 @@ BTreeNode* InternalNode::remove(int value)
       ptr = children [i] -> remove(value);
     }else if (i == count - 1 && value >= keys[i]){
       ptr = children [i] -> remove(value);
-    }
+    }//end else if
   }//end for
   if(!ptr){
     return NULL;
