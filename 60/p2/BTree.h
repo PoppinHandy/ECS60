@@ -1,5 +1,5 @@
 #ifndef BTREE_H
-  #define BTREE_H
+#define BTREE_H
 
 #include "BTreeNode.h"
 
@@ -13,6 +13,6 @@ public:
   void insert(int value);
   void print();
   void remove(int value);
-}; // BTree class
+ }; // BTree class
 #endif
 

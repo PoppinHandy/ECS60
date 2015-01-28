@@ -5,7 +5,7 @@
 using namespace std;
 
 InternalNode::InternalNode(int ISize, int LSize,
-  InternalNode *p, BTreeNode *left, BTreeNode *right) :
+			   InternalNode *p, BTreeNode *left, BTreeNode *right) :
   BTreeNode(LSize, p, left, right), internalSize(ISize)
 {
   keys = new int[internalSize]; // keys[i] is the minimum of children[i]
@@ -21,10 +21,10 @@ BTreeNode* InternalNode::addPtr(BTreeNode *ptr, int pos)
   BTreeNode *last = children[count - 1];
 
   for(int i = count - 2; i >= pos; i--)
-  {
-    children[i + 1] = children[i];
-    keys[i + 1] = keys[i];
-  } // shift things to right to make room for ptr, i can be -1!
+    {
+      children[i + 1] = children[i];
+      keys[i + 1] = keys[i];
+    } // shift things to right to make room for ptr, i can be -1!
 
   children[pos] = ptr;  // i will end up being the position that it is inserted
   keys[pos] = ptr->getMinimum();
@@ -38,10 +38,10 @@ void InternalNode::addToLeft(BTreeNode *last)
   ((InternalNode*)leftSibling)->insert(children[0]);
 
   for(int i = 0; i < count - 1; i++)
-  {
-    children[i] = children[i + 1];
-    keys[i] = keys[i + 1];
-  }
+    {
+      children[i] = children[i + 1];
+      keys[i] = keys[i + 1];
+    }
 
   children[count - 1] = last;
   keys[count - 1] = last->getMinimum();
@@ -65,10 +65,10 @@ void InternalNode::addToThis(BTreeNode *ptr, int pos)
   int i;
 
   for(i = count - 1; i >= pos; i--)
-  {
+    {
       children[i + 1] = children[i];
       keys[i + 1] = keys[i];
-  } // shift to the right to make room at pos
+    } // shift to the right to make room at pos
 
   children[pos] = ptr;
   keys[pos] = ptr->getMinimum();
@@ -110,24 +110,24 @@ InternalNode* InternalNode::insert(int value)
     return NULL;
 
   if(count < internalSize)
-  {
-    addToThis(ptr, pos + 1);
-    return NULL;
-  } // if room for value
+    {
+      addToThis(ptr, pos + 1);
+      return NULL;
+    } // if room for value
 
   last = addPtr(ptr, pos + 1);
 
   if(leftSibling && leftSibling->getCount() < internalSize)
-  {
-    addToLeft(last);
-    return NULL;
-  }
-  else // left sibling full or non-existent
-    if(rightSibling && rightSibling->getCount() < internalSize)
     {
-      addToRight(ptr, last);
+      addToLeft(last);
       return NULL;
     }
+  else // left sibling full or non-existent
+    if(rightSibling && rightSibling->getCount() < internalSize)
+      {
+	addToRight(ptr, last);
+	return NULL;
+      }
     else // both siblings full or non-existent
       return split(last);
 } // InternalNode::insert()
@@ -180,6 +180,15 @@ void InternalNode::print(Queue <BTreeNode*> &queue)
 BTreeNode* InternalNode::remove(int value)
 {  // to be written by students
   BTreeNode *ptr;
+  cout << count << endl;
+  
+  if (getLeftSibling() == NULL && getRightSibling() == NULL && count == 1)
+    {
+      cout << "andy u da bes" << endl;
+      if (count < (internalSize+1)/2) {
+	return children[0];
+      }
+    }
   for (int i = 0; i < count; i++){
     if (i == 0 && keys[i] >=value ){
       ptr = children [i] -> remove(value);
@@ -208,12 +217,15 @@ BTreeNode* InternalNode::remove(int value)
       if (ptr == children [i]){
 	if(i == count - 1){
 	  count --;
+	  cout << count << endl;
 	}else{
 	  for (int j = i; j < count; j++){
-	      keys [j] = keys[j+1];
-	      children [j] = children [j+1];
-	    }//end for
+	    keys [j] = keys[j+1];
+	    children [j] = children [j+1];
+	  }//end for
 	  count --;
+	  if (count == 1)
+	    return children[0];
 	}//end else
       }//end if
     }//end for
@@ -226,19 +238,19 @@ void InternalNode::resetMinimum(const BTreeNode* child)
 {
   for(int i = 0; i < count; i++)
     if(children[i] == child)
-    {
-      keys[i] = children[i]->getMinimum();
-      if(i == 0 && parent)
-        parent->resetMinimum(this);
-      break;
-    }
+      {
+	keys[i] = children[i]->getMinimum();
+	if(i == 0 && parent)
+	  parent->resetMinimum(this);
+	break;
+      }
 } // InternalNode::resetMinimum()
 
 
 InternalNode* InternalNode::split(BTreeNode *last)
 {
   InternalNode *newptr = new InternalNode(internalSize, leafSize,
-    parent, this, rightSibling);
+					  parent, this, rightSibling);
 
 
   if(rightSibling)
@@ -247,11 +259,11 @@ InternalNode* InternalNode::split(BTreeNode *last)
   rightSibling = newptr;
 
   for(int i = (internalSize + 1) / 2; i < internalSize; i++)
-  {
-    newptr->children[newptr->count] = children[i];
-    newptr->keys[newptr->count++] = keys[i];
-    children[i]->setParent(newptr);
-  }
+    {
+      newptr->children[newptr->count] = children[i];
+      newptr->keys[newptr->count++] = keys[i];
+      children[i]->setParent(newptr);
+    }
 
   newptr->children[newptr->count] = last;
   newptr->keys[newptr->count++] = last->getMinimum();
