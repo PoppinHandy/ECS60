@@ -203,7 +203,21 @@ BTreeNode* InternalNode::remove(int value)
     //cout << "NULL"<<endl;
     return NULL;
   }else{
-    //cout << "Ptr returned not null" << endl;
+    this -> removeThis(value);
+    if (count >= (internalSize + 1)/2){
+      return NULL;
+    }else if (count < (internalSize + 1)/2){
+      //if can borrow
+      if (leftSibling -> getCount() > (internalSize+1)/2){
+	this -> insert (leftSibling -> getMaximum());
+	leftSibling -> remove(getMaximum());
+      }
+  }//end outermost else
+  return NULL; // filler for stub
+} // InternalNode::remove(int value)
+
+void InternalNode::removeThis(int value){
+  //cout << "Ptr returned not null" << endl;
     for (int i = 0; i < count; i++){
       if (ptr == children [i]){
 	if(i == count - 1){
@@ -217,10 +231,7 @@ BTreeNode* InternalNode::remove(int value)
 	}//end else
       }//end if
     }//end for
-  }//end outermost else
-  return NULL; // filler for stub
-} // InternalNode::remove(int value)
-
+}//end removeThis
 
 void InternalNode::resetMinimum(const BTreeNode* child)
 {
