@@ -41,10 +41,10 @@ void BTree::print()
 void BTree::remove(int value)
 {
   BTreeNode *ptr;
-  
   ptr = root->remove(value);
-  if (ptr && dynamic_cast<InternalNode*>(root)) {
-    delete root;
-    root = ptr;
-  }
+   if(ptr){
+     //cout << "redirecting ptr" << endl;
+     //delete root;
+     root = ptr;
+   }//end if
 } // BTree::remove()

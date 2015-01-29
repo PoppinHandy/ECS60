@@ -123,9 +123,8 @@ void LeafNode::print(Queue <BTreeNode*> &queue)
 
 LeafNode* LeafNode::remove(int value)
 {   // To be written by students
-  //cout << "Count is: " << count << endl;
-  //cout << "leafSize is: " << (leafSize + 1)/2 << endl;
   this -> removeThis(value);
+  //cout << "removing " << value << endl;
   //Condition checking after value removed, if array is above or equal to min value then ok, else handle conditions
   if (count >= (leafSize + 1)/2){
     return NULL;
@@ -135,13 +134,15 @@ LeafNode* LeafNode::remove(int value)
       //if can borrow
       if (leftSibling -> getCount() > (leafSize + 1)/2){
 	this -> insert (leftSibling -> getMaximum());
-	leftSibling->remove(getMaximum()); //remove the value
+	leftSibling->remove(leftSibling -> getMaximum()); //remove the value
+	//cout << "removed left" << endl;
 	return NULL;
       }else if (leftSibling -> getCount () <= (leafSize + 1)/2){    //merge
 	//cout << "Merge Left"<< endl;
 	for (int i = 0; i < count; i ++){
 	  leftSibling -> insert(values[i]);
 	}
+	leftSibling -> setRightSibling(this -> rightSibling);//remap siblings
 	count = 0;
 	return this; //returns non-NULL so parent knows to delete
       }
@@ -150,13 +151,15 @@ LeafNode* LeafNode::remove(int value)
       //if can borrow
       if (rightSibling -> getCount() > (leafSize + 1)/2){
 	this -> insert(rightSibling -> getMinimum());
-	rightSibling->remove(getMinimum()); //remove the value
+	rightSibling->remove(rightSibling -> getMinimum()); //remove the value
+	//cout << "removed right" << endl;
 	return NULL;
       }else if(rightSibling -> getCount() <= (leafSize + 1)/2){
 	//cout << "Merging Right" << endl;
 	for (int i = 0; i < count; i ++){
 	  rightSibling -> insert(values[i]);
 	}
+	rightSibling -> setLeftSibling (this -> leftSibling); //remap siblings
 	count = 0;
 	//cout << "Here" << endl;
 	return this; //returns non-NULL so parent knows to delete

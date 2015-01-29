@@ -24,6 +24,7 @@ public:
   void insert(BTreeNode *newNode); // from a sibling
   void print(Queue <BTreeNode*> &queue);
   BTreeNode* remove(int value);
+  BTreeNode* deleteChild(int pos);
   void resetMinimum(const BTreeNode* child);
   InternalNode* split(BTreeNode *last);
 }; // InternalNode class

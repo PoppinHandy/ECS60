@@ -180,70 +180,108 @@ void InternalNode::print(Queue <BTreeNode*> &queue)
 BTreeNode* InternalNode::remove(int value)
 {  // to be written by students
   BTreeNode *ptr;
-  cout << count << endl;
-  
-  if (getLeftSibling() == NULL && getRightSibling() == NULL && count == 1)
-    {
-      cout << "andy u da bes" << endl;
-      if (count < (internalSize+1)/2) {
-	return children[0];
-      }
-    }
+
   for (int i = 0; i < count; i++){
     if (i == 0 && keys[i] >=value ){
+      //cout << "1" << endl;
       ptr = children [i] -> remove(value);
       resetMinimum(children[i]);
       break;
     }else if (keys[i] > value){
+      //cout << "2" << endl;
       ptr = children [i-1] -> remove (value);
-      resetMinimum(children[i-1]);
+      resetMinimum(children[i]);
       break;
     }else if(keys [i] == value){
+      //cout << "3" << endl;
       ptr = children [i] -> remove(value);
       resetMinimum(children[i]);
       break;
     }else if (i == count - 1 && value >= keys[i]){
+      //cout << "4" << endl;
       ptr = children [i] -> remove(value);
       resetMinimum(children[i]);
       break;
     }//end else if
   }//end for
-  if(!ptr){
+  if(ptr == NULL){
     //cout << "NULL"<<endl;
     return NULL;
-  }else{
-    this -> removeThis(value);
-    if (count >= (internalSize + 1)/2){
-      return NULL;
-    }else if (count < (internalSize + 1)/2){
-      //if can borrow
-      if (leftSibling -> getCount() > (internalSize+1)/2){
-	this -> insert (leftSibling -> getMaximum());
-	leftSibling -> remove(getMaximum());
-      }
-  }//end outermost else
-  return NULL; // filler for stub
-} // InternalNode::remove(int value)
-
-void InternalNode::removeThis(int value){
-  //cout << "Ptr returned not null" << endl;
+  }
+  else{
+//Removes the internal node value===============================
     for (int i = 0; i < count; i++){
       if (ptr == children [i]){
 	if(i == count - 1){
 	  count --;
-	  cout << count << endl;
+	  cout << "decremented count " << count << endl;
 	}else{
 	  for (int j = i; j < count; j++){
 	    keys [j] = keys[j+1];
 	    children [j] = children [j+1];
 	  }//end for
+	  cout << "decremented count " << count << endl;
 	  count --;
-	  if (count == 1)
-	    return children[0];
 	}//end else
       }//end if
     }//end for
-}//end removeThis
+//=======================================================
+    if (getLeftSibling() == NULL && getRightSibling() == NULL){
+      //cout << "returning children [0] " << endl;
+      return children[0];
+    }//end if(getLeftSibling())
+    if (count >= (internalSize + 1)/2){
+      cout << "No need to borrow/merge" << endl;
+      return NULL;
+    }else if (count < (internalSize + 1)/2){
+      //looks left
+      if(leftSibling){
+	if(leftSibling -> getCount() > (internalSize + 1)/2){
+	  this -> insert (((InternalNode*)leftSibling) -> keys[leftSibling -> getCount()-1]);
+	  children[0] = ((InternalNode*)leftSibling) -> deleteChild(0);
+	  leftSibling -> remove (((InternalNode*)leftSibling) -> getCount() - 1 );
+	  cout << "Borrowing " << keys[0];
+	  return NULL;
+	}//end if(leftSibling -> getCount())
+	//MERGE 
+	else if(leftSibling -> getCount() <= (internalSize + 1)/2){
+	  for(int i = 0; i < count; i++){
+	    ((InternalNode*)leftSibling) -> insert(this ->keys[i]);
+	    ((InternalNode*)leftSibling)-> insert(this -> children[i]);
+	  }
+	  count = 0;
+	  return this;
+	}//end else if(leftSibling -> getCount())
+      }//end if(leftSibling)
+      else if (rightSibling){
+	if(rightSibling -> getCount() > (internalSize + 1)/2){
+	  this -> insert (((InternalNode*)rightSibling) -> keys[0]);
+	  children[count - 1] = ((InternalNode*)rightSibling) -> deleteChild(0);
+	  leftSibling -> remove (((InternalNode*)rightSibling) -> keys[0]);
+	  cout << "Borrowing " << keys[count - 1] << endl;
+	  return NULL;
+	}//end if(leftSibling -> getCount())
+	//MERGE 
+	else if(rightSibling -> getCount() <= (internalSize + 1)/2){
+	  for(int i = 0; i < count; i++){
+	    ((InternalNode*)rightSibling) -> insert(this -> keys[i]);
+	    ((InternalNode*)rightSibling)-> insert(this -> children[i]);
+	  }
+	  count = 0;
+	  return this;
+	}//end else if(rightSibling -> getCount())
+      }//end else if (rightSibling)
+    }//end else if(count < )
+    return NULL; // filler for stub
+  }//end else
+}// InternalNode::remove(int value)
+
+BTreeNode* InternalNode::deleteChild(int pos){
+  BTreeNode* ptr = children[pos];
+  delete children[pos];
+  return ptr;
+}//end deadChildren
+
 
 void InternalNode::resetMinimum(const BTreeNode* child)
 {
