@@ -169,7 +169,7 @@ LeafNode* LeafNode::remove(int value)
 }//end LeafNode::remove()
 
 void LeafNode::removeThis(int value){
-    for (int i = 0; i < count; i++){
+  for (int i = 0; i < count; i++){
     if (value == values[i]){
       if (i == count - 1){         //if deleted value is at the end of the list
 	count--;
@@ -186,22 +186,22 @@ void LeafNode::removeThis(int value){
 
 LeafNode* LeafNode::split(int value, int last)
 {
-   LeafNode *ptr = new LeafNode(leafSize, parent, this, rightSibling);
+  LeafNode *ptr = new LeafNode(leafSize, parent, this, rightSibling);
 
-   if(rightSibling)
-     rightSibling->setLeftSibling(ptr);
+  if(rightSibling)
+    rightSibling->setLeftSibling(ptr);
 
-   rightSibling = ptr;
+  rightSibling = ptr;
 
-   for(int i = (leafSize + 1) / 2; i < leafSize; i++)
-     ptr->values[ptr->count++] = values[i];
+  for(int i = (leafSize + 1) / 2; i < leafSize; i++)
+    ptr->values[ptr->count++] = values[i];
 
-   ptr->values[ptr->count++] = last;
-   count = (leafSize + 1) / 2;
+  ptr->values[ptr->count++] = last;
+  count = (leafSize + 1) / 2;
 
-   if(value == values[0] && parent)
-     parent->resetMinimum(this);
-   return ptr;
- } // LeafNode::split()
+  if(value == values[0] && parent)
+    parent->resetMinimum(this);
+  return ptr;
+} // LeafNode::split()
 
     

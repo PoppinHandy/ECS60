@@ -42,9 +42,9 @@ void BTree::remove(int value)
 {
   BTreeNode *ptr;
   ptr = root->remove(value);
-   if(ptr){
-     //cout << "redirecting ptr" << endl;
-     //delete root;
-     root = ptr;
-   }//end if
+  if(ptr){
+    cout << " here 6? " << endl;
+    delete root;
+    root = ptr;
+  }//end if
 } // BTree::remove()
