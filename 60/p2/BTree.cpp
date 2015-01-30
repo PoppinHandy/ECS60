@@ -1,3 +1,4 @@
+//Programmed by Edward Guo and Andy Pham
 #include <iostream>
 #include "BTree.h"
 #include "BTreeNode.h"
@@ -43,8 +44,9 @@ void BTree::remove(int value)
   BTreeNode *ptr;
   ptr = root->remove(value);
   if(ptr){
-    cout << " here 6? " << endl;
-    delete root;
+    //cout << " here 6? " << endl;
+    //delete root;
     root = ptr;
+    root -> setParent(NULL);
   }//end if
 } // BTree::remove()

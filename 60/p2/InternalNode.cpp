@@ -1,3 +1,4 @@
+//Programmed by Edward Guo and Andy Pham
 #include <iostream>
 #include <climits>
 #include "InternalNode.h"
@@ -180,13 +181,18 @@ void InternalNode::print(Queue <BTreeNode*> &queue)
 BTreeNode* InternalNode::remove(int value)
 {  // to be written by students
   BTreeNode *ptr;
-  
+
   for (int i = 0; i < count; i++){
     if (i == 0 && keys[i] >=value ){
       ptr = children [i] -> remove(value);
-      //resetMinimum(children[i]);
-      resetMinimum(children[i+1]);
-      break;
+      //cout << "1" << endl;
+      if(count == 1){
+	return children[0];
+      }else{
+	resetMinimum(children[i]);
+	resetMinimum(children[i+1]);
+	break;
+      }
     }else if (keys[i] > value){
       //cout << "2" << endl;
       ptr = children [i-1] -> remove (value);
@@ -205,7 +211,7 @@ BTreeNode* InternalNode::remove(int value)
     }//end else if
   }//end for
   if(ptr == NULL){
-    cout << " here?" << endl;
+    //cout << " here?" << endl;
     // cout << "NULL"<<endl;
     return NULL;
   }
@@ -228,19 +234,19 @@ BTreeNode* InternalNode::remove(int value)
     }//end for
     //=======================================================
     if (getLeftSibling() == NULL && getRightSibling() == NULL){
-      //cout << "returning children [0] " << endl;
+      cout << "returning children [0] " << endl;
       return children[0];
     }//end if(getLeftSibling())
     if (count >= (internalSize + 1)/2){
       // cout << "No need to borrow/merge" << endl;
-      cout << " here?1" << endl;
+      //cout << " here?1" << endl;
       return NULL;
     }else if (count < (internalSize + 1)/2){
       //looks left
       if(leftSibling){
 	if(leftSibling -> getCount() > (internalSize + 1)/2){
 	  this -> insert (((InternalNode*)leftSibling) -> deleteChild(0));
-	  cout << " here?3" << endl;
+	  //cout << " here?3" << endl;
 	  return NULL;
 	}//end if(leftSibling -> getCount())
 	 //MERGE 
@@ -249,14 +255,14 @@ BTreeNode* InternalNode::remove(int value)
 	     {
 	       ((InternalNode*)leftSibling)->insert(this->children[i]); 
 	     }
-	   cout << " here?154" << endl;
+	   //cout << " here?154" << endl;
 	   return this;
 	 }//end else if(leftSibling -> getCount())
        }//end if(leftSibling)
        else if (rightSibling){
 	 if(rightSibling -> getCount() > (internalSize + 1)/2){
 	   this -> insert (((InternalNode*)rightSibling) -> deleteChild(0));
-	   cout << " here?4" << endl;
+	   //cout << " here?4" << endl;
 	   return NULL;
 	 }//end if(leftSibling -> getCount())
 	 //MERGE 
@@ -265,7 +271,7 @@ BTreeNode* InternalNode::remove(int value)
 	     {
 	       ((InternalNode*)rightSibling)->insert(this->children[i]); 
 	     }
-	   cout << " here?54" << endl;
+	   //cout << " here?54" << endl;
 	   return this;
 	 }//end else if(rightSibling -> getCount())
        }//end else if (rightSibling)
