@@ -9,7 +9,7 @@ using namespace std;
 
 
 LeafNode::LeafNode(int LSize, InternalNode *p,
-		   BTreeNode *left, BTreeNode *right) : BTreeNode(LSize, p, left, right)
+                   BTreeNode *left, BTreeNode *right) : BTreeNode(LSize, p, left, right)
 {
   values = new int[LSize];
 }  // LeafNode()
@@ -60,7 +60,7 @@ void LeafNode::addValue(int value, int &last)
       last = values[count - 1];
 
       for(i = count - 2; i >= 0 && values[i] > value; i--)
-	values[i + 1] = values[i];
+        values[i + 1] = values[i];
       // i may end up at -1
       values[i + 1] = value;
     }
@@ -106,8 +106,8 @@ LeafNode* LeafNode::insert(int value)
   else // left sibling full or non-existent
     if(rightSibling && rightSibling->getCount() < leafSize)
       {
-	addToRight(value, last);
-	return NULL;
+        addToRight(value, last);
+        return NULL;
       }
     else // both siblings full or non-existent
       return split(value, last);
@@ -134,34 +134,34 @@ LeafNode* LeafNode::remove(int value)
     if (leftSibling != NULL) {
       //if can borrow
       if (leftSibling -> getCount() > (leafSize + 1)/2){
-	this -> insert (leftSibling -> getMaximum());
-	leftSibling->remove(leftSibling -> getMaximum()); //remove the value
-	//cout << "removed left" << endl;
-	return NULL;
+        this -> insert (leftSibling -> getMaximum());
+        leftSibling->remove(leftSibling -> getMaximum()); //remove the value
+        //cout << "removed left" << endl;
+        return NULL;
       }else if (leftSibling -> getCount () <= (leafSize + 1)/2){    //merge
-	//cout << "Merge Left"<< endl;
-	for (int i = 0; i < count; i ++){
-	  leftSibling -> insert(values[i]);
-	}
-	leftSibling -> setRightSibling(this -> rightSibling);//remap siblings
-	return this; //returns non-NULL so parent knows to delete
+        //cout << "Merge Left"<< endl;
+        for (int i = 0; i < count; i ++){
+          leftSibling -> insert(values[i]);
+        }
+    	leftSibling -> setRightSibling(this -> rightSibling);//remap siblings
+        return this; //returns non-NULL so parent knows to delete
       }
     } //end if
     else if (rightSibling != NULL) {
       //if can borrow
       if (rightSibling -> getCount() > (leafSize + 1)/2){
-	this -> insert(rightSibling -> getMinimum());
-	rightSibling->remove(rightSibling -> getMinimum()); //remove the value
-	//cout << "removed right" << endl;
-	return NULL;
+        this -> insert(rightSibling -> getMinimum());
+        rightSibling->remove(rightSibling -> getMinimum()); //remove the value
+        //cout << "removed right" << endl;
+        return NULL;
       }else if(rightSibling -> getCount() <= (leafSize + 1)/2){
-	//cout << "Merging Right" << endl;
-	for (int i = 0; i < count; i ++){
-	  rightSibling -> insert(values[i]);
-	}
-	rightSibling -> setLeftSibling (this -> leftSibling); //remap siblings
-	//cout << "Here" << endl;
-	return this; //returns non-NULL so parent knows to delete
+        //cout << "Merging Right" << endl;
+        for (int i = 0; i < count; i ++){
+          rightSibling -> insert(values[i]);
+        }
+    	rightSibling -> setLeftSibling (this -> leftSibling); //remap siblings
+        //cout << "Here" << endl;
+        return this; //returns non-NULL so parent knows to delete
       }//end inner else if
       return NULL;
     }//end else if
@@ -173,13 +173,13 @@ void LeafNode::removeThis(int value){
   for (int i = 0; i < count; i++){
     if (value == values[i]){
       if (i == count - 1){         //if deleted value is at the end of the list
-	count--;
+        count--;
       }//end if
       else{
-	for (int j = i; j < count; j++){
-	  values[j] = values[j+1];
-	}//end for
-	count --;
+        for (int j = i; j < count; j++){
+          values[j] = values[j+1];
+        }//end for
+        count --;
       }//end else
     }//end value == values if
   }//end for
