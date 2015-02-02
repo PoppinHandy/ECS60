@@ -143,7 +143,7 @@ LeafNode* LeafNode::remove(int value)
         for (int i = 0; i < count; i ++){
           leftSibling -> insert(values[i]);
         }
-    	leftSibling -> setRightSibling(this -> rightSibling);//remap siblings
+    	leftSibling -> setRightSibling(rightSibling);//remap siblings
         return this; //returns non-NULL so parent knows to delete
       }
     } //end if
@@ -159,7 +159,7 @@ LeafNode* LeafNode::remove(int value)
         for (int i = 0; i < count; i ++){
           rightSibling -> insert(values[i]);
         }
-    	rightSibling -> setLeftSibling (this -> leftSibling); //remap siblings
+    	rightSibling -> setLeftSibling (leftSibling); //remap siblings
         //cout << "Here" << endl;
         return this; //returns non-NULL so parent knows to delete
       }//end inner else if
