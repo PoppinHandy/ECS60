@@ -255,7 +255,6 @@ BTreeNode* InternalNode::remove(int value)
             {
               ((InternalNode*)leftSibling)->insert(this->children[i]); 
             }
-
           leftSibling->setRightSibling(rightSibling);
           //cout << " here?154" << endl;
           return this;
