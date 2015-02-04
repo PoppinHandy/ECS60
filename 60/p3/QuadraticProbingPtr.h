@@ -34,18 +34,9 @@ class QuadraticPtrHashTable
 
   const QuadraticPtrHashTable & operator=( const QuadraticPtrHashTable & rhs );
 
-  enum EntryType { ACTIVE, EMPTY, DELETED };
  private:
-  struct HashEntry
-  {
-    HashedObj element;
-    EntryType info;
-
-  HashEntry( const HashedObj & e = HashedObj( ), EntryType i = EMPTY )
-  : element( e ), info( i ) { }
-  };
-
-  vector<HashEntry> array;
+  
+  vector<const HashObject*> array;
   int currentSize;
   const HashedObj ITEM_NOT_FOUND;
   bool isPrime( int n ) const;

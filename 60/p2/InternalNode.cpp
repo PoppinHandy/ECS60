@@ -270,7 +270,7 @@ BTreeNode* InternalNode::remove(int value)
         else if(rightSibling -> getCount() <= (internalSize + 1)/2){
           for (int i = 0; i < count; ++i)
             {
-              ((InternalNode*)rightSibling)->insert(this->children[i]); 
+              ((InternalNode*)rightSibling)->addToThis(this->children[i], i); 
             }
           rightSibling->setLeftSibling(leftSibling);
           //cout << " here?54" << endl;
