@@ -26,7 +26,10 @@ class QuadraticPtrHashTable
    : ITEM_NOT_FOUND( rhs.ITEM_NOT_FOUND ),
     array( rhs.array ), currentSize( rhs.currentSize ) { }
 
+  ~QuadraticPtrHashTable( );
+
   const HashedObj & find( const HashedObj & x ) const;
+ 
 
   void makeEmpty( );
   void insert( const HashedObj & x );
@@ -36,7 +39,7 @@ class QuadraticPtrHashTable
 
  private:
   
-  vector<const HashObject*> array;
+  vector<const HashedObj*> array;
   int currentSize;
   const HashedObj ITEM_NOT_FOUND;
   bool isPrime( int n ) const;
