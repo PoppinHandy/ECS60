@@ -58,6 +58,7 @@ void QuadraticPtrHashTable<HashedObj>::insert( const HashedObj & x )
   int currentPos = findPos( x );
   if( isActive( currentPos ) )
     return;
+      
   array[ currentPos ] = &x;
 
   // Rehash; see Section 5.5
@@ -94,8 +95,8 @@ int QuadraticPtrHashTable<HashedObj>::findPos( const HashedObj & x ) const
 {
   /* 1*/      int collisionNum = 0;
   /* 2*/      int currentPos = hash( x, array.size( ) );
-  /* 3*/      while( isActive(*array[currentPos]) &&
-                     array[ currentPos ] != &x )
+  /* 3*/      while( array[currentPos] != NULL &&
+                     array[ currentPos ] != & x )
     {
       /* 4*/          currentPos += 2 * ++collisionNum - 1;  // Compute ith probe
       /* 5*/          if( currentPos >= array.size( ) )
@@ -126,7 +127,7 @@ template <class HashedObj>
 const HashedObj & QuadraticPtrHashTable<HashedObj>::find( const HashedObj & x ) const
 {
   int currentPos = findPos( x );
-  return isActive( currentPos ) ? array[ currentPos ].element : ITEM_NOT_FOUND;
+  return isActive( currentPos ) ? array[ currentPos ] : ITEM_NOT_FOUND;
 }
 
 /**
@@ -162,7 +163,8 @@ operator=( const QuadraticPtrHashTable<HashedObj> & rhs )
 template <class HashedObj>
 bool QuadraticPtrHashTable<HashedObj>::isActive( int currentPos ) const
 {
-  if (array[currentPos] != NULL && *array[currentPos] != ITEM_NOT_FOUND)
+  HashedObj notFound = ITEM_NOT_FOUND;
+  if (array[currentPos] != NULL && array[currentPos] != &notFound)
     return true;
 }
 
