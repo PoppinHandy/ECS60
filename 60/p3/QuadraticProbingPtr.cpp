@@ -1,4 +1,3 @@
-//ANdy Pham and Edward Guo
 #include "QuadraticProbingPtr.h"
 
 
@@ -200,7 +199,8 @@ int QuadraticPtrHashTable<HashedObj>::hash( int key, int tableSize ) const
 
 template <class HashedObj>
 QuadraticPtrHashTable<HashedObj>::~QuadraticPtrHashTable() {
-  for (int i = 0; i < array.size(); i++) {
-    delete array[i];
-  }
+
+  vector<HashedObj> *pArray = new vector<HashedObj>();
+  delete pArray;
+  
 }
