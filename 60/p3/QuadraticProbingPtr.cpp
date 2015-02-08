@@ -59,7 +59,7 @@ void QuadraticPtrHashTable<HashedObj>::insert( const HashedObj & x )
   if( isActive( currentPos ) )
     return;
       
-  array[ currentPos ] = &x;
+  array[ currentPos ] = new HashedObj(x);
 
   // Rehash; see Section 5.5
   if( ++currentSize > array.size( ) / 2 )
@@ -82,7 +82,7 @@ void QuadraticPtrHashTable<HashedObj>::rehash( )
   // Copy table over
   currentSize = 0;
   for( int i = 0; i < oldArray.size( ); i++ )
-    if( isActive(*oldArray[ i ]) )
+    if( oldArray[i] != NULL && oldArray[i] != &ITEM_NOT_FOUND )
       insert( *oldArray[ i ] );
 }
 
