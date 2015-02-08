@@ -48,7 +48,6 @@ class BinarySearchTree
     const Comparable & find( const Comparable & x ) const;
     bool isEmpty( ) const;
     void printTree( ) const;
-
     void makeEmpty( );
     void insert( const Comparable & x );
     void remove( const Comparable & x );
@@ -59,7 +58,7 @@ class BinarySearchTree
   private:
     BinaryNode<Comparable> *root;
     const Comparable ITEM_NOT_FOUND;
-
+    
     const Comparable & elementAt( BinaryNode<Comparable> *t ) const;
 
     void insert( const Comparable & x, BinaryNode<Comparable> * & t ) const;
@@ -69,6 +68,8 @@ class BinarySearchTree
     BinaryNode<Comparable> * find( const Comparable & x, BinaryNode<Comparable> *t ) const;
     void makeEmpty( BinaryNode<Comparable> * & t ) const;
     void printTree( BinaryNode<Comparable> *t ) const;
+    void printNodeRange(BinaryNode<Comparable> *t1, BinaryNode<Comparable> *t2);
+    BinaryNode<Comparable> * findNearestNode(const Comparable &x, BinaryNode<Comparable> *t, int range);
     BinaryNode<Comparable> * clone( BinaryNode<Comparable> *t ) const;
 };
 

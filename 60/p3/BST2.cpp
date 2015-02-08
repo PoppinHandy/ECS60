@@ -291,11 +291,68 @@ void BinarySearchTree<Comparable>::printTree( BinaryNode<Comparable> *t ) const
 
 template <class Comparable>
 void BinarySearchTree<Comparable>::printRange(const Comparable &x, const Comparable &y) const
-
 {
-  // Students must write this.
-}
+ 
+  if (find(x) != &notFound && find(y) != &notFound){
+    printNodeRange(find(x, root), find(y, root));
+  }else if(find(x) != &notFound && find(y) == notFound){
+    printNodeRange(find(x, root), findNearestNode(y, root, 1));
+  }else if(find(x) == ITEM_NOT_FOUND && find(y) == ITEM_NOT_FOUND){
+    printNodeRange(findNearestNode(x, root, 0), findNearestNode(y, root, 1));
+  }else if(find(x) == &notFound && find(y) != &notFound){
+    printNodeRange(findNearestNode(x, root, 0), find(y));
+  }
+}//end printRange
 
+
+template <classComparable>
+void BinarySearchTree<Comparable>::printNodeRange(BinaryNode<Comparable> *t1, BinaryNode<Comparable> *t2){
+  if (t1 != NULL && t1 != t2){
+    cout << t1 -> element << " " << endl;
+    printNodeRange(t1 -> left, t2);
+    printNodeRange(t1 -> right, t2);
+  }else if (t1 == NULL || t1 == t2){
+    return;
+  }//end else if
+}//end printNodeRange
+
+/*
+  Finds the nearest node to x if x isn't found
+  0 is for x
+  1 is for y
+ */ 
+BinaryNode <Comparable> * BinarySearchTree<Comparable>::findNearestNode(const Comparable &x, BinaryNode<Comparable> *t, int range){
+  if (range == 0){
+    if (t -> left != NULL){
+      if (t -> element > x){
+	if (elementAt(t->left) > x) {
+	  return findNearestNode(x, t -> left, 0);
+	}else if (elementAt(t-> left) < x){
+	  return t;
+	}
+      }else if (t -> element < x){
+	return findNearestNode(x, t -> right, 0);
+      }
+    }else {
+      return t;
+    }//end else
+  }//end range == 0
+  else if (range == 1){
+    if (t -> right != NULL){
+      if (t -> element < x){
+	if (elementAt(t -> right) <  x){
+	  return findNearesNode(x, t-> right, 0);
+	}else if (elementAt(t -> right > x)){
+	  return t;
+	}//end else if (elementAt)
+      }//end if (t-> element)
+    }else{
+      return t;
+    }//end else return t
+  }//end range == 1
+}//end findNearestNode
+
+      
 
 
 /**
