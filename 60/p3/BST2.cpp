@@ -292,20 +292,19 @@ void BinarySearchTree<Comparable>::printTree( BinaryNode<Comparable> *t ) const
 template <class Comparable>
 void BinarySearchTree<Comparable>::printRange(const Comparable &x, const Comparable &y) const
 {
- 
-  if (find(x) != &notFound && find(y) != &notFound){
+  if ((find(x) != ITEM_NOT_FOUND) && find(y) != ITEM_NOT_FOUND){
     printNodeRange(find(x, root), find(y, root));
-  }else if(find(x) != &notFound && find(y) == notFound){
+  }else if(find(x) != ITEM_NOT_FOUND && find(y) == ITEM_NOT_FOUND){
     printNodeRange(find(x, root), findNearestNode(y, root, 1));
-  }else if(find(x) == ITEM_NOT_FOUND && find(y) == ITEM_NOT_FOUND){
+  }else if((find(x) == ITEM_NOT_FOUND) && (find(y) == ITEM_NOT_FOUND)){
     printNodeRange(findNearestNode(x, root, 0), findNearestNode(y, root, 1));
-  }else if(find(x) == &notFound && find(y) != &notFound){
-    printNodeRange(findNearestNode(x, root, 0), find(y));
+  }else if((find(x) == ITEM_NOT_FOUND) && (find(y) != ITEM_NOT_FOUND)){
+    printNodeRange(findNearestNode(x, root, 0), find(y, root));
   }
 }//end printRange
 
 
-template <classComparable>
+template <class Comparable>
 void BinarySearchTree<Comparable>::printNodeRange(BinaryNode<Comparable> *t1, BinaryNode<Comparable> *t2){
   if (t1 != NULL && t1 != t2){
     cout << t1 -> element << " " << endl;
