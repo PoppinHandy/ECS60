@@ -292,25 +292,29 @@ void BinarySearchTree<Comparable>::printTree( BinaryNode<Comparable> *t ) const
 template <class Comparable>
 void BinarySearchTree<Comparable>::printRange(const Comparable &x, const Comparable &y) const
 {
-  if ((find(x) != ITEM_NOT_FOUND) && find(y) != ITEM_NOT_FOUND){
+  if (find(x) != ITEM_NOT_FOUND && find(y) != ITEM_NOT_FOUND){
     printNodeRange(find(x, root), find(y, root));
-  }else if(find(x) != ITEM_NOT_FOUND && find(y) == ITEM_NOT_FOUND){
+  }
+  else if(find(x) != ITEM_NOT_FOUND && find(y) == ITEM_NOT_FOUND){
     printNodeRange(find(x, root), findNearestNode(y, root, 1));
-  }else if((find(x) == ITEM_NOT_FOUND) && (find(y) == ITEM_NOT_FOUND)){
+  }
+  else if((find(x) == ITEM_NOT_FOUND) && (find(y) == ITEM_NOT_FOUND)){
     printNodeRange(findNearestNode(x, root, 0), findNearestNode(y, root, 1));
-  }else if((find(x) == ITEM_NOT_FOUND) && (find(y) != ITEM_NOT_FOUND)){
+  }
+  else if((find(x) == ITEM_NOT_FOUND) && (find(y) != ITEM_NOT_FOUND)){
     printNodeRange(findNearestNode(x, root, 0), find(y, root));
   }
 }//end printRange
 
 
 template <class Comparable>
-void BinarySearchTree<Comparable>::printNodeRange(BinaryNode<Comparable> *t1, BinaryNode<Comparable> *t2){
+void BinarySearchTree<Comparable>::printNodeRange(BinaryNode<Comparable> *t1, BinaryNode<Comparable> *t2) const {
   if (t1 != NULL && t1 != t2){
     cout << t1 -> element << " " << endl;
     printNodeRange(t1 -> left, t2);
     printNodeRange(t1 -> right, t2);
-  }else if (t1 == NULL || t1 == t2){
+  }
+  else if (t1 == NULL || t1 == t2){
     return;
   }//end else if
 }//end printNodeRange
@@ -319,18 +323,19 @@ void BinarySearchTree<Comparable>::printNodeRange(BinaryNode<Comparable> *t1, Bi
   Finds the nearest node to x if x isn't found
   0 is for x
   1 is for y
- */ 
-BinaryNode <Comparable> * BinarySearchTree<Comparable>::findNearestNode(const Comparable &x, BinaryNode<Comparable> *t, int range){
+ */
+template <class Comparable>
+BinaryNode <Comparable> * BinarySearchTree<Comparable>::findNearestNode(const Comparable &x, BinaryNode<Comparable> *t, int range) const {
   if (range == 0){
     if (t -> left != NULL){
       if (t -> element > x){
-	if (elementAt(t->left) > x) {
-	  return findNearestNode(x, t -> left, 0);
-	}else if (elementAt(t-> left) < x){
-	  return t;
-	}
+        if (elementAt(t->left) > x) {
+          return findNearestNode(x, t -> left, 0);
+        }else if (elementAt(t-> left) < x){
+          return t;
+        }
       }else if (t -> element < x){
-	return findNearestNode(x, t -> right, 0);
+        return findNearestNode(x, t -> right, 0);
       }
     }else {
       return t;
@@ -339,11 +344,11 @@ BinaryNode <Comparable> * BinarySearchTree<Comparable>::findNearestNode(const Co
   else if (range == 1){
     if (t -> right != NULL){
       if (t -> element < x){
-	if (elementAt(t -> right) <  x){
-	  return findNearesNode(x, t-> right, 0);
-	}else if (elementAt(t -> right > x)){
-	  return t;
-	}//end else if (elementAt)
+        if (elementAt(t -> right) <  x){
+          return findNearestNode(x, t-> right, 0);
+        }else if (elementAt(t -> right) > x){
+          return t;
+        }//end else if (elementAt)
       }//end if (t-> element)
     }else{
       return t;

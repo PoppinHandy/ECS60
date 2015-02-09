@@ -26,16 +26,16 @@ class QuadraticPtrHashTable
    : ITEM_NOT_FOUND( rhs.ITEM_NOT_FOUND ),
     array( rhs.array ), currentSize( rhs.currentSize ) { }
 
-  ~QuadraticPtrHashTable( );
+    ~QuadraticPtrHashTable( );
 
-  const HashedObj & find( const HashedObj & x ) const;
+    const HashedObj & find( const HashedObj & x ) const;
  
 
-  void makeEmpty( );
-  void insert( const HashedObj & x );
-  void remove( const HashedObj & x );
+    void makeEmpty( );
+    void insert( const HashedObj & x );
+    void remove( const HashedObj & x );
 
-  const QuadraticPtrHashTable & operator=( const QuadraticPtrHashTable & rhs );
+    const QuadraticPtrHashTable & operator=( const QuadraticPtrHashTable & rhs );
 
  private:
   
