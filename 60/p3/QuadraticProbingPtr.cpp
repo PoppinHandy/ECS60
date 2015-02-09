@@ -113,10 +113,10 @@ int QuadraticPtrHashTable<HashedObj>::findPos( const HashedObj & x ) const
 template <class HashedObj>
 void QuadraticPtrHashTable<HashedObj>::remove( const HashedObj & x )
 {
-  // HashedObj notFound = ITEM_NOT_FOUND;
-  int currentPos = findPos( x );
-  if( isActive( currentPos ) )
-    array[ currentPos ] = &ITEM_NOT_FOUND;
+   HashedObj notFound = ITEM_NOT_FOUND;
+   int currentPos = findPos( x );
+   if( isActive( currentPos ) )
+     array[ currentPos ] = &notFound;
 }
 
 /**
