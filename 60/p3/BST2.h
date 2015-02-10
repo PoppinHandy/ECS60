@@ -68,8 +68,9 @@ class BinarySearchTree
     BinaryNode<Comparable> * find( const Comparable & x, BinaryNode<Comparable> *t ) const;
     void makeEmpty( BinaryNode<Comparable> * & t ) const;
     void printTree( BinaryNode<Comparable> *t ) const;
-    void printNodeRange(BinaryNode<Comparable> *t1, BinaryNode<Comparable> *t2) const;
-    BinaryNode<Comparable> * findNearestNode(const Comparable &x, BinaryNode<Comparable> *t, int range) const;
+    void printNodeRange(BinaryNode<Comparable> *t1, BinaryNode<Comparable> *t2, const Comparable &x, const Comparable &y) const;
+    BinaryNode<Comparable> * findNearestLowerNode(const Comparable &x, BinaryNode<Comparable> *t) const;
+    BinaryNode<Comparable> * findNearestUpperNode(const Comparable &y, BinaryNode<Comparable> *t) const;
     BinaryNode<Comparable> * clone( BinaryNode<Comparable> *t ) const;
 };
 

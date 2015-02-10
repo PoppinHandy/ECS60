@@ -292,72 +292,108 @@ void BinarySearchTree<Comparable>::printTree( BinaryNode<Comparable> *t ) const
 template <class Comparable>
 void BinarySearchTree<Comparable>::printRange(const Comparable &x, const Comparable &y) const
 {
-  if (find(x) != ITEM_NOT_FOUND && find(y) != ITEM_NOT_FOUND){
-    printNodeRange(find(x, root), find(y, root));
-  }
-  else if(find(x) != ITEM_NOT_FOUND && find(y) == ITEM_NOT_FOUND){
-    printNodeRange(find(x, root), findNearestNode(y, root, 1));
-  }
-  else if((find(x) == ITEM_NOT_FOUND) && (find(y) == ITEM_NOT_FOUND)){
-    printNodeRange(findNearestNode(x, root, 0), findNearestNode(y, root, 1));
-  }
-  else if((find(x) == ITEM_NOT_FOUND) && (find(y) != ITEM_NOT_FOUND)){
-    printNodeRange(findNearestNode(x, root, 0), find(y, root));
-  }
+  cout << "x is: " << x << endl;
+  cout << "y is: " << y << endl;
+  if (x < y){
+    if ((find(x) != ITEM_NOT_FOUND) && find(y) != ITEM_NOT_FOUND){
+      cout << "here0" << endl;
+      printNodeRange(find(x, root), find(y, root));
+      cout << endl;
+    }
+    else if(find(x) != ITEM_NOT_FOUND && find(y) == ITEM_NOT_FOUND){
+      cout << "here1" << endl;
+      printNodeRange(find(x, root), findNearestUpperNode(y, root));
+      cout << endl;
+    }
+    else if((find(x) == ITEM_NOT_FOUND) && (find(y) == ITEM_NOT_FOUND)){
+      cout << "here2" << endl;
+      printNodeRange(findNearestLowerNode(x, root), findNearestUpperNode(y, root));
+      //cout << (findNearestLowerNode (x, root))-> element << endl;
+      //cout << (findNearestUpperNode (y, root))-> element << endl;
+    }
+      else if((find(x) == ITEM_NOT_FOUND) && (find(y) != ITEM_NOT_FOUND)){
+	cout << "here3" << endl;
+	printNodeRange(findNearestLowerNode(x, root), find(y, root));
+	cout << endl;
+      }
+  }//end if (x < y)
+  else{
+    if ((find(x) != ITEM_NOT_FOUND) && find(y) != ITEM_NOT_FOUND){
+      cout << "here0" << endl;
+      printNodeRange(find(y, root), find(x, root));
+      cout << endl;
+    }
+    else if(find(x) != ITEM_NOT_FOUND && find(y) == ITEM_NOT_FOUND){
+      cout << "here1" << endl;
+      printNodeRange(find(y, root), findNearestUpperNode(x, root));
+      cout << endl;
+    }
+    else if((find(x) == ITEM_NOT_FOUND) && (find(y) == ITEM_NOT_FOUND)){
+      cout << "here16" << endl;
+      printNodeRange(findNearestLowerNode(y, root), findNearestUpperNode(x, root));
+      //cout <<  "  HIGH NODE IS: " <<  (findNearestUpperNode (x, root))-> element << endl;
+    }
+    else if((find(x) == ITEM_NOT_FOUND) && (find(y) != ITEM_NOT_FOUND)){
+      cout << "here3" << endl;
+      printNodeRange(findNearestLowerNode(y, root), find(x, root));
+      cout << endl;
+    }
+  }//end outer else
 }//end printRange
 
 
 template <class Comparable>
-void BinarySearchTree<Comparable>::printNodeRange(BinaryNode<Comparable> *t1, BinaryNode<Comparable> *t2) const {
-  if (t1 != NULL && t1 != t2){
-    cout << t1 -> element << " " << endl;
-    printNodeRange(t1 -> left, t2);
-    printNodeRange(t1 -> right, t2);
+void BinarySearchTree<Comparable>::printNodeRange(BinaryNode<Comparable> *t1, BinaryNode<Comparable> *t2, const Comparable &x, const Comparable &y) const{
+  if (t1 -> element == &x){
+    printNodeRange(t1 -> right, t2, x, y);
   }
-  else if (t1 == NULL || t1 == t2){
+  else if(t1 != NULL && t1 -> element != t2 -> element){
+    printNodeRange( t1 -> left, t2, x, y);
+    cout << t1 -> element << " ";
+    printNodeRange(t1 -> right, t2, x, y);
+  }
+  else if (t1 == NULL || (t1 == t2)){
     return;
   }//end else if
 }//end printNodeRange
 
 /*
   Finds the nearest node to x if x isn't found
-  0 is for x
-  1 is for y
+ */
+template <class Comparable> 
+BinaryNode <Comparable> * BinarySearchTree<Comparable>::findNearestLowerNode(const Comparable &x, BinaryNode<Comparable> *t) const{
+  if (t -> element > x){
+    if (elementAt(t->left) > x) {
+      return findNearestLowerNode(x, t -> left);
+    }//end inner if
+    else if (elementAt(t-> left) < x){
+      return t;
+    }//end inner else if
+  }//end if (t -> element > x)
+  else if (t -> element < x){
+    return findNearestLowerNode(x, t -> right);
+  }//end else if
+  return NULL;
+}//end findNearestLowerNode
+
+/*
+  Finds the nearest node to y if y isn't found
  */
 template <class Comparable>
-BinaryNode <Comparable> * BinarySearchTree<Comparable>::findNearestNode(const Comparable &x, BinaryNode<Comparable> *t, int range) const {
-  if (range == 0){
-    if (t -> left != NULL){
-      if (t -> element > x){
-        if (elementAt(t->left) > x) {
-          return findNearestNode(x, t -> left, 0);
-        }else if (elementAt(t-> left) < x){
-          return t;
-        }
-      }else if (t -> element < x){
-        return findNearestNode(x, t -> right, 0);
-      }
-    }else {
+BinaryNode <Comparable> * BinarySearchTree<Comparable>::findNearestUpperNode(const Comparable &y, BinaryNode<Comparable> *t) const{
+  if (t -> element < y){
+    if(elementAt(t -> right) > y){
       return t;
-    }//end else
-  }//end range == 0
-  else if (range == 1){
-    if (t -> right != NULL){
-      if (t -> element < x){
-        if (elementAt(t -> right) <  x){
-          return findNearestNode(x, t-> right, 0);
-        }else if (elementAt(t -> right) > x){
-          return t;
-        }//end else if (elementAt)
-      }//end if (t-> element)
-    }else{
-      return t;
-    }//end else return t
-  }//end range == 1
-}//end findNearestNode
-
-      
-
+    }//end inner if
+    else if(elementAt(t -> right) < y){
+      return findNearestUpperNode(y, t-> right);
+    }//end inner else if
+  }//else if (t -> element < y)
+  else if(t -> element > y){
+    return findNearestUpperNode(y, t-> left);
+  }//end else if(t->element > y)
+  return NULL;
+}//end findNearestUpperNode
 
 /**
  * Internal method to clone subtree.
