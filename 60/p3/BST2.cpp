@@ -297,45 +297,45 @@ void BinarySearchTree<Comparable>::printRange(const Comparable &x, const Compara
   if (x < y){
     if ((find(x) != ITEM_NOT_FOUND) && find(y) != ITEM_NOT_FOUND){
       cout << "here0" << endl;
-      printNodeRange(find(x, root), find(y, root));
+      printNodeRange(find(x, root), find(y, root), x, y);
       cout << endl;
     }
     else if(find(x) != ITEM_NOT_FOUND && find(y) == ITEM_NOT_FOUND){
       cout << "here1" << endl;
-      printNodeRange(find(x, root), findNearestUpperNode(y, root));
+      printNodeRange(find(x, root), findNearestUpperNode(y, root), x, y);
       cout << endl;
     }
     else if((find(x) == ITEM_NOT_FOUND) && (find(y) == ITEM_NOT_FOUND)){
       cout << "here2" << endl;
-      printNodeRange(findNearestLowerNode(x, root), findNearestUpperNode(y, root));
+      printNodeRange(findNearestLowerNode(x, root), findNearestUpperNode(y, root), x, y);
       //cout << (findNearestLowerNode (x, root))-> element << endl;
       //cout << (findNearestUpperNode (y, root))-> element << endl;
     }
       else if((find(x) == ITEM_NOT_FOUND) && (find(y) != ITEM_NOT_FOUND)){
 	cout << "here3" << endl;
-	printNodeRange(findNearestLowerNode(x, root), find(y, root));
+	printNodeRange(findNearestLowerNode(x, root), find(y, root), x, y);
 	cout << endl;
       }
   }//end if (x < y)
   else{
     if ((find(x) != ITEM_NOT_FOUND) && find(y) != ITEM_NOT_FOUND){
       cout << "here0" << endl;
-      printNodeRange(find(y, root), find(x, root));
+      printNodeRange(find(y, root), find(x, root), y, x);
       cout << endl;
     }
     else if(find(x) != ITEM_NOT_FOUND && find(y) == ITEM_NOT_FOUND){
       cout << "here1" << endl;
-      printNodeRange(find(y, root), findNearestUpperNode(x, root));
+      printNodeRange(find(y, root), findNearestUpperNode(x, root), y, x);
       cout << endl;
     }
     else if((find(x) == ITEM_NOT_FOUND) && (find(y) == ITEM_NOT_FOUND)){
       cout << "here16" << endl;
-      printNodeRange(findNearestLowerNode(y, root), findNearestUpperNode(x, root));
+      printNodeRange(findNearestLowerNode(y, root), findNearestUpperNode(x, root), y, x);
       //cout <<  "  HIGH NODE IS: " <<  (findNearestUpperNode (x, root))-> element << endl;
     }
     else if((find(x) == ITEM_NOT_FOUND) && (find(y) != ITEM_NOT_FOUND)){
       cout << "here3" << endl;
-      printNodeRange(findNearestLowerNode(y, root), find(x, root));
+      printNodeRange(findNearestLowerNode(y, root), find(x, root), y, x);
       cout << endl;
     }
   }//end outer else
@@ -344,10 +344,7 @@ void BinarySearchTree<Comparable>::printRange(const Comparable &x, const Compara
 
 template <class Comparable>
 void BinarySearchTree<Comparable>::printNodeRange(BinaryNode<Comparable> *t1, BinaryNode<Comparable> *t2, const Comparable &x, const Comparable &y) const{
-  if (t1 -> element == &x){
-    printNodeRange(t1 -> right, t2, x, y);
-  }
-  else if(t1 != NULL && t1 -> element != t2 -> element){
+  if(t1 != NULL && t1 -> element != t2 -> element){
     printNodeRange( t1 -> left, t2, x, y);
     cout << t1 -> element << " ";
     printNodeRange(t1 -> right, t2, x, y);
