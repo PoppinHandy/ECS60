@@ -10,7 +10,7 @@ using namespace std;
 
 int readFamilies(ifstream &inf, Family *families)
 {
-  char line[1024], *ptr, gender;
+  char line[1024], *ptr;
   int familyCount = 0, childCount;
   while(inf.getline(line, 1024))
   {
@@ -77,29 +77,49 @@ int main(int argc, char* argv[])
   char dummy;
   inf >> generations >> dummy >> pairs >> dummy >> queryCount;
   inf.ignore(10, '\n');
-  Family *families = new Family[30000];
+  Family *families = new Family[200000];
   Query *queries = new Query[queryCount];
   Person *answers = new Person[queryCount];
   Person *answerKeys = new Person[queryCount];
   readQueries(inf, queries, answerKeys, queryCount);
   familyCount = readFamilies(inf, families);
-   CPUTimer ct;
+  CPUTimer ct;
   ct.reset();
   FamilyTree *familyTree = new FamilyTree(families, familyCount);
   delete [] families;
   familyTree->runQueries(queries, answers, queryCount);
   cout << "CPU Time: " << ct.cur_CPUTime() << endl;
+
   for(int i = 0; i < queryCount; i++)
     if(answerKeys[i].year == -1)
+    {
       if(answers[i].year != -1)
+      {
         cout << "You found an ancestor when there was none on query #"  << i << endl;
-      else
-        if(answers[i].year != answerKeys[i].year 
-          || strcmp(answers[i].lastName, answerKeys[i].lastName) != 0
-          || strcmp(answers[i].firstName, answerKeys[i].firstName) != 0
-          || answers[i].gender != answerKeys[i].gender)
-          cout << "Disagreement on query #" << i << endl;
-          
+        cout << "Descendent 1: " << queries[i].person1.year << ' ' 
+          << queries[i].person1.lastName << ',' << queries[i].person1.firstName  << endl;
+        cout << "Descendent 2: " << queries[i].person2.year << ' ' 
+          << queries[i].person2.lastName << ',' << queries[i].person2.firstName  << endl;
+        cout << "Your answer:" << answers[i].year << ' ' << answers[i].lastName
+          << ',' << answers[i].firstName << endl;
+      }
+    }    
+    else  // An ancestor should be found
+      if(answers[i].year != answerKeys[i].year 
+       || strcmp(answers[i].lastName, answerKeys[i].lastName) != 0
+       || strcmp(answers[i].firstName, answerKeys[i].firstName) != 0
+       || answers[i].gender != answerKeys[i].gender)
+      {
+        cout << "Disagreement on query #" << i << endl;
+         cout << "Descendent 1: " << queries[i].person1.year << ' ' 
+          << queries[i].person1.lastName << ',' << queries[i].person1.firstName  << endl;
+        cout << "Descendent 2: " << queries[i].person2.year << ' ' 
+          << queries[i].person2.lastName << ',' << queries[i].person2.firstName  << endl;
+        cout << "Proper answer: " << answerKeys[i].year << ' ' << answerKeys[i].lastName
+          << ',' << answerKeys[i].firstName << endl;
+        cout << "Your answer:" << answers[i].year << ' ' << answers[i].lastName
+          << ',' << answers[i].firstName << endl;
+      }
   return 0;
 }  // main()
 
