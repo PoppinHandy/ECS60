@@ -1,0 +1,22 @@
+// Author: Sean Davis
+
+#include "familytree.h"
+
+Person2::Person2()
+{
+  person.year = -1;
+  id = 0;
+}//end default constructor
+
+FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), 10000)
+{
+  
+} // FamilyTree()
+
+void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
+{
+  
+}  // runQueries()
+
+
+
