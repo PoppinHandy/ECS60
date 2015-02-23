@@ -16,4 +16,3 @@ FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), 1
 }  // runQueries()*/
 
 
-
