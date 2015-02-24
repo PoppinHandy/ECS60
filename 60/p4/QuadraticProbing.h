@@ -22,7 +22,7 @@ class Person2{
  public:
   Person2();
   Person2( Person &p);
-  void setParent(Person2 &p1, Person2 &p2);
+  //void setParent(Person2 &p1, Person2 &p2);
   Person person;
   int parent1;
   int parent2;
@@ -41,6 +41,7 @@ class QuadraticHashTable
   //int find( const Person2 & x ) const;
 
   void makeEmpty( );
+  void displayHashTable( int x, int y);
   int insert( Person2 & x );
   //void remove( const HashedObj & x );
   const Person2 & findIndex(int index) const;

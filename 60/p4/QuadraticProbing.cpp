@@ -53,17 +53,21 @@ Person2::Person2()
 Person2::Person2(Person &p):person(p)
 { 
   id = person.year;
-  for (int i = 0; i < 3; i++){
-    id += int(person.firstName[i]);
-    //id += int(person.lastName[i]);
-  }
+  for (int i = 0; i < 3; i++)
+    {
+      id += int(person.firstName[i]);
+      id += int(person.lastName[i]);
+    }
+  parent1 = 0;
+  parent2 = 0;
+  //cout << person.firstName << " id is " << id << endl;
 }//end constructor
 
-void Person2::setParent(Person2 &p1, Person2 &p2)
+/*void Person2::setParent(int p1, int p2)
 {
-  parent1 = p1.id % 100000;
-  parent2 = p2.id % 100000;
-}
+  parent1 = p1;
+  parent2 = p2;
+  }*/
 /**
  * Construct the hash table.
  */
@@ -82,15 +86,29 @@ int QuadraticHashTable::insert( Person2 & p )
   // Insert x as active
   int currentPos = findPos( p );
   if( isActive( currentPos ) )
-    return currentPos;
+    {
+      return currentPos;
+    }
   array[ currentPos ] = p;
-  cout << "inserting " << array[currentPos].person.firstName << endl;
   return currentPos;
   // Rehash; see Section 5.5
   /*if( ++currentSize > array.size( ) / 2 )
     rehash( );*/
 }
 
+void QuadraticHashTable::displayHashTable(int x, int y)
+{
+  for (int i = x; i <= y; i++)
+    {
+      if(array[i].person.year != -1){
+	cout << "Child: " << array[i].person.firstName << endl;
+	cout << "Parent1: " << array[i].parent1 << endl;
+	cout << "Parent2: " << array[i].parent2 << endl;
+	cout << "ID: " << array[i].id << endl;
+	cout << endl;
+      }
+    }
+}
 /**
  * Expand the hash table.
  */
@@ -119,7 +137,6 @@ int QuadraticHashTable::findPos( Person2 & p ) const
 {
   /* 1*/      int collisionNum = 0;
   /* 2*/      int currentPos = hash( p, array.size( ) );
-
   /* 3*/      while( array[ currentPos ].person.year != -1 &&
 		     array[ currentPos ].id != p.id )
     {
@@ -127,7 +144,6 @@ int QuadraticHashTable::findPos( Person2 & p ) const
       /* 5*/          if( currentPos >= array.size( ) )
 	/* 6*/              currentPos -= array.size( );
     }
-
   /* 7*/      return currentPos;
 }
 
@@ -218,6 +234,5 @@ bool QuadraticHashTable::isActive( int currentPos ) const
  */
 int QuadraticHashTable::hash( Person2 &p, int tableSize ) const
 {
-  
   return p.id % tableSize;
 }
