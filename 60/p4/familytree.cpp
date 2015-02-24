@@ -52,7 +52,7 @@ void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
       int currentNode = q1.getFront();
       q1.dequeue();
       qCurrentLevel --;
-      if(currentNode != 0)
+      if(currentNode != 0 && ppl.parent1 != 0 && ppl.parent2 != 0)
 	{
 	  ppl = hashTable.findIndex(ppl.parent1);
 	  q1.enqueue(hashTable.insert(ppl));
@@ -71,7 +71,32 @@ void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
   q1.makeEmpty();
 
   //inserting second query into queue
-
+  ppl = Person2(queries[0].person2);
+  ppl = hashTable.findIndex(hashTable.insert(ppl));
+  q1.enqueue(hashTable.insert(ppl));
+  cout << q1.getFront() << endl;
+  while (!q1.isEmpty())
+    {
+      int currentNode = q1.getFront();
+      q1.dequeue();
+      qCurrentLevel --;
+      if(currentNode != 0 && ppl.parent1 != 0 && ppl.parent2 != 0)
+	{
+	  ppl = hashTable.findIndex(ppl.parent1);
+	  q1.enqueue(hashTable.insert(ppl));
+	  ppl = hashTable.findIndex(ppl.parent2);
+	  q1.enqueue(hashTable.insert(ppl));
+	  qNextLevel += 2;
+	}//end if
+      if(qCurrentLevel == 0)
+	{
+	  qCurrentLevel = qNextLevel;
+	  qNextLevel = 0;
+	}//end if
+      q3.enqueue(hashTable.findIndex(currentNode));
+      cout << q3.getFront().person.firstName << endl;
+  }//end while
+  q1.makeEmpty();
 } // runQueries()
 
 
