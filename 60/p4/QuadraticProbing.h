@@ -21,10 +21,13 @@
 class Person2{
  public:
   Person2();
+  Person2( Person &p);
   //void setPerson(Person &p);
   //const Person2 & getPerson();
-  Person2( Person &p);
+  void setParent(Person2 &p1, Person2 &p2);
   Person person;
+  int parent1;
+  int parent2;
   int id;
 };
 
@@ -42,7 +45,7 @@ class QuadraticHashTable
   void makeEmpty( );
   void insert( const Person2 & x );
   //void remove( const HashedObj & x );
-
+  const Person2 & findIndex(int index) const;
   const QuadraticHashTable & operator=( const QuadraticHashTable & rhs );
 
   //enum EntryType { ACTIVE, EMPTY, DELETED };

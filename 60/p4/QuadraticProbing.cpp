@@ -45,6 +45,8 @@ Person2::Person2()
 {
   person.year = -1;
   id = 0;
+  parent1 = 0;
+  parent2 = 0;
 }
 
 /*void Person2::setPerson(Person &p)
@@ -60,6 +62,7 @@ const Person2 & Person2::getPerson()
   return *this;
   }*/
 
+//Parent
 Person2::Person2(Person &p):person(p)
 { 
   
@@ -68,6 +71,11 @@ Person2::Person2(Person &p):person(p)
   id += atoi(person.lastName);
 }
 
+void Person2::setParent(Person2 &p1, Person2 &p2)
+{
+  parent1 = p1.id % 100000;
+  parent2 = p2.id % 100000;
+}
 /**
  * Construct the hash table.
  */
@@ -154,6 +162,15 @@ int QuadraticHashTable::find(const Person2 & p ) const
 {
   int currentPos = findPos( p );
   return isActive( currentPos ) ? currentPos : -1;
+}
+
+/**
+ * Find Person in the hash table.
+ * Return the matching item, or ITEM_NOT_FOUND, if not found.
+ */
+const Person2 & QuadraticHashTable::findIndex(int index) const
+{
+  return array[index];
 }
 
 /**
