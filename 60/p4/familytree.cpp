@@ -12,20 +12,28 @@ FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), 1
   Person2 p2;
   for(int i = 0; i < familyCount; i++)
     {
-      p1 = Person2(families[i].person);
-      p2 = Person2(families[i].spouse);
-      hashTable.insert(p1);
-      hashTable.insert(p2);
-      for(int j = 0; j < families[i].childCount; j++)
+      if (families[i].spouse.year != -1 && families[i].person.year != -1)
 	{
-	  child = Person2(families[i].children[j]);
-	  hashTable.insert(child);
-	  child.setParent(p1, p2);
-	}//end inner for
+	  p1 = Person2(families[i].person);
+	  p2 = Person2(families[i].spouse);
+	  hashTable.insert(p1);
+	  hashTable.insert(p2);
+	  for(int j = 0; j < families[i].childCount; j++)
+	    {
+	      child = Person2(families[i].children[j]);
+	      hashTable.insert(child);
+	      child.setParent(p1, p2);
+	    }//end inner for
+	}
+      else 
+	{
+	  p1 = Person2(families[i].person);
+	  hashTable.insert(p1);
+	}
     }//end outer for
 } // FamilyTree()
 
-void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
+/*void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
 {
   Queue <Person2> q1(100000);
   Queue <Person2> q2(100000);
@@ -52,6 +60,7 @@ void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
 	  qNextLevel = 0;
 	}//end if
        q2.enqueue(currentNode);
+       cout << q2.getFront().person.firstName << endl;
   }//end while
   q1.makeEmpty();
 
@@ -73,9 +82,10 @@ void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
 	  qCurrentLevel = qNextLevel;
 	  qNextLevel = 0;
 	}//end if
-       q2.enqueue(currentNode);
+       q3.enqueue(currentNode);
   }//end while
-} // runQueries()
+
+  } // runQueries()*/
 
 
 

@@ -65,11 +65,12 @@ const Person2 & Person2::getPerson()
 //Parent
 Person2::Person2(Person &p):person(p)
 { 
-  
   id = person.year;
-  id += atoi(person.firstName);
-  id += atoi(person.lastName);
-}
+  for (int i = 0; i < 3; i++){
+    id += int(person.firstName[i]);
+    //id += int(person.lastName[i]);
+  }
+}//end constructor
 
 void Person2::setParent(Person2 &p1, Person2 &p2)
 {

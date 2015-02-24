@@ -87,8 +87,8 @@ int main(int argc, char* argv[])
   ct.reset();
   FamilyTree *familyTree = new FamilyTree(families, familyCount);
   delete [] families;
-  familyTree->runQueries(queries, answers, queryCount);
-  cout << "CPU Time: " << ct.cur_CPUTime() << endl;
+  //familyTree->runQueries(queries, answers, queryCount);
+  //cout << "CPU Time: " << ct.cur_CPUTime() << endl;
 
   /*for(int i = 0; i < queryCount; i++)
     if(answerKeys[i].year == -1)

@@ -8,7 +8,7 @@ class FamilyTree {
   
  public:
   FamilyTree(Family *families, int familyCount);
-  void runQueries(Query *queries, Person *answers, int queryCount);
+  //void runQueries(Query *queries, Person *answers, int queryCount);
   QuadraticHashTable hashTable;
 };
 
