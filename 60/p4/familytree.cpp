@@ -33,25 +33,31 @@ FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), 1
     }//end outer for
 } // FamilyTree()
 
-/*void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
+void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
 {
-  Queue <Person2> q1(100000);
+  Queue <int> q1(100000);
   Queue <Person2> q2(100000);
   Queue <Person2> q3(100000);
   int qCurrentLevel = 1;
   int qNextLevel = 0;
   
   //inserting first query into queue
-  q1.enqueue(Person2(queries[0].person1));
+  Person2 ppl;
+  ppl = Person2(queries[0].person1);
+  ppl = hashTable.findIndex(hashTable.insert(ppl));
+  q1.enqueue(hashTable.insert(ppl));
+  cout << q1.getFront() << endl;
   while (!q1.isEmpty())
     {
-      const Person2 currentNode = q1.getFront();
+      int currentNode = q1.getFront();
       q1.dequeue();
       qCurrentLevel --;
-      if(currentNode.person.year != -1)
+      if(currentNode != 0)
 	{
-	  q1.enqueue(hashTable.findIndex(currentNode.parent1));
-	  q1.enqueue(hashTable.findIndex(currentNode.parent2));
+	  ppl = hashTable.findIndex(ppl.parent1);
+	  q1.enqueue(hashTable.insert(ppl));
+	  ppl = hashTable.findIndex(ppl.parent2);
+	  q1.enqueue(hashTable.insert(ppl));
 	  qNextLevel += 2;
 	}//end if
       if(qCurrentLevel == 0)
@@ -59,33 +65,14 @@ FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), 1
 	  qCurrentLevel = qNextLevel;
 	  qNextLevel = 0;
 	}//end if
-       q2.enqueue(currentNode);
-       cout << q2.getFront().person.firstName << endl;
+      q2.enqueue(hashTable.findIndex(currentNode));
+      cout << q2.getFront().person.firstName << endl;
   }//end while
   q1.makeEmpty();
 
   //inserting second query into queue
-  q1.enqueue(Person2(queries[0].person2));
-  while (!q1.isEmpty())
-    {
-      const Person2 currentNode = q1.getFront();
-      q1.dequeue();
-      qCurrentLevel --;
-      if(currentNode.person.year != -1)
-	{
-	  q1.enqueue(hashTable.findIndex(currentNode.parent1));
-	  q1.enqueue(hashTable.findIndex(currentNode.parent2));
-	  qNextLevel += 2;
-	}//end if
-      if(qCurrentLevel == 0)
-	{
-	  qCurrentLevel = qNextLevel;
-	  qNextLevel = 0;
-	}//end if
-       q3.enqueue(currentNode);
-  }//end while
 
-  } // runQueries()*/
+} // runQueries()
 
 
 

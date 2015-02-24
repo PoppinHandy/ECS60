@@ -49,19 +49,6 @@ Person2::Person2()
   parent2 = 0;
 }
 
-/*void Person2::setPerson(Person &p)
-{
-  memcpy(&person, &p, sizeof(Person));
-  id = person.year;
-  id += atoi(person.firstName);
-  id += atoi(person.lastName);
-}
-
-const Person2 & Person2::getPerson()
-{
-  return *this;
-  }*/
-
 //Parent
 Person2::Person2(Person &p):person(p)
 { 
@@ -90,14 +77,15 @@ QuadraticHashTable::QuadraticHashTable(const Person2 &p, int size )
  * Insert item x into the hash table. If the item is
  * already present, then do nothing.
  */
-void QuadraticHashTable::insert( const Person2 & p )
+int QuadraticHashTable::insert( Person2 & p )
 {
   // Insert x as active
   int currentPos = findPos( p );
   if( isActive( currentPos ) )
-    return;
+    return currentPos;
   array[ currentPos ] = p;
   cout << "inserting " << array[currentPos].person.firstName << endl;
+  return currentPos;
   // Rehash; see Section 5.5
   /*if( ++currentSize > array.size( ) / 2 )
     rehash( );*/
@@ -127,7 +115,7 @@ void QuadraticHashTable<HashedObj>::rehash( )
  * Method that performs quadratic probing resolution.
  * Return the position where the search for x terminates.
  */
-int QuadraticHashTable::findPos( const Person2 & p ) const
+int QuadraticHashTable::findPos( Person2 & p ) const
 {
   /* 1*/      int collisionNum = 0;
   /* 2*/      int currentPos = hash( p, array.size( ) );
@@ -159,11 +147,11 @@ void QuadraticHashTable<HashedObj>::remove( const HashedObj & x )
  * Find item x in the hash table.
  * Return the matching item, or ITEM_NOT_FOUND, if not found.
  */
-int QuadraticHashTable::find(const Person2 & p ) const
+/*int QuadraticHashTable::find(const Person2 & p ) const
 {
   int currentPos = findPos( p );
   return isActive( currentPos ) ? currentPos : -1;
-}
+  }*/
 
 /**
  * Find Person in the hash table.
@@ -228,7 +216,7 @@ bool QuadraticHashTable::isActive( int currentPos ) const
 /**
  * A hash routine for ints.
  */
-int QuadraticHashTable::hash( const Person2 &p, int tableSize ) const
+int QuadraticHashTable::hash( Person2 &p, int tableSize ) const
 {
   
   return p.id % tableSize;

@@ -22,8 +22,6 @@ class Person2{
  public:
   Person2();
   Person2( Person &p);
-  //void setPerson(Person &p);
-  //const Person2 & getPerson();
   void setParent(Person2 &p1, Person2 &p2);
   Person person;
   int parent1;
@@ -40,10 +38,10 @@ class QuadraticHashTable
    : ITEM_NOT_FOUND( rhs.ITEM_NOT_FOUND ),
    array( rhs.array ), currentSize( rhs.currentSize ) { }*/
 
-  int find( const Person2 & x ) const;
+  //int find( const Person2 & x ) const;
 
   void makeEmpty( );
-  void insert( const Person2 & x );
+  int insert( Person2 & x );
   //void remove( const HashedObj & x );
   const Person2 & findIndex(int index) const;
   const QuadraticHashTable & operator=( const QuadraticHashTable & rhs );
@@ -65,9 +63,9 @@ class QuadraticHashTable
   //bool isPrime( int n ) const;
   //int nextPrime( int n ) const;
   bool isActive( int currentPos ) const;
-  int findPos( const Person2 & p ) const;
+  int findPos( Person2 & p ) const;
   //int hash( const string & key, int tableSize ) const;
-  int hash( const Person2 & p, int tableSize ) const;
+  int hash( Person2 & p, int tableSize ) const;
   //void rehash( );
 };
 
