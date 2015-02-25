@@ -1,8 +1,8 @@
 // Author: Sean Davis
 
 #include "familytree.h"
-#include "QueueAr.h"
 #include <stdlib.h>
+#include <string.h>
 
 using namespace std;
 
@@ -41,11 +41,12 @@ FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), 1
 
 void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
 {
-  Queue <Person2> q1(100000);
-  Queue <Person2> q2(100000);
+  Queue <Person2> q1(10);
+  Queue <Person2> q2(10);
   Person2 ppl;
   int q1_size = 1;
   int q2_size = 1;
+  int answerCount = 0;
   int qCurrentLevel = 1;
   int qNextLevel = 0;
   for (int qc = 0; qc < queryCount; qc++){
@@ -58,6 +59,7 @@ void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
     ppl = hashTable.findIndex(hashTable.insert(ppl));
     q1.enqueue(ppl);
     //cout << "ppl's id is: " << ppl.parent1 << endl;
+    // Start level-order traversal
     while (!q1.isEmpty())
       {
 	Person2 currentNode = q1.getFront();
@@ -80,9 +82,10 @@ void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
 	q1_size ++;
       }//end while
     for (int i = 0; i < q1_size - 1; i++){
-      cout <<  "queue1: " << q1.theArray[i].person.firstName << " " << q1.theArray[i].person.lastName << endl;
+      cout <<  "Queue1: " << q1.theArray[i].person.firstName << " " << q1.theArray[i].person.lastName << endl;
     }
     
+    //Reset vars for next person
     qCurrentLevel = 1;
     qNextLevel = 0;
   
@@ -91,6 +94,7 @@ void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
     ppl = hashTable.findIndex(hashTable.insert(ppl));
     q2.enqueue(ppl);
     //cout << "ppl's id is: " << ppl.parent1 << endl;
+    // Start level-order traversal
     while (!q2.isEmpty())
       {
 	Person2 currentNode = q2.getFront();
@@ -116,7 +120,9 @@ void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
       {
 	cout <<  "Queue2: " << q2.theArray[i].person.firstName << " " << q2.theArray[i].person.lastName << endl;
       }
-
+    
+    //Get common ancestor time
+    convertPerson2(getAncestor(q1, q1_size, q2, q2_size), answers[answerCount]);
   }//end Query loop
 } // runQueries()
 
@@ -125,16 +131,55 @@ int compare (const void * a, const void * b)
   if ( (*(Person2*)a).person.year < (*(Person2*)b).person.year )
     return 1;
   if ( (*(Person2*)a).person.year == (*(Person2*)b).person.year )
-    return 0;
+    {
+      if(strcmp ((*(Person2*)a).person.lastName,(*(Person2*)b).person.lastName) == 0)
+	{
+	  return strcmp ((*(Person2*)a).person.firstName,(*(Person2*)b).person.firstName);
+	}
+      else
+	{
+	  return strcmp ((*(Person2*)a).person.lastName,(*(Person2*)b).person.lastName);
+	}
+    }
   if ( (*(Person2*)a).person.year > (*(Person2*)b).person.year )
     return -1;
+  return 0;
 }//end compare
 
-Person2 & getAncestor (Queue <Person2> &a, int a_size, Queue <Person2> &b, int b_size)
+Person2& FamilyTree::getAncestor (Queue <Person2> &a, int a_size, Queue <Person2> &b, int b_size)
 {
-  qsort(&a.theArray, a_size, sizeof(Person2), compare);
-  qsort(&b.theArray, a_size, sizeof(Person2), compare);
-  
-  
+  qsort(&a.theArray, sizeof(a)/sizeof(Person2) , sizeof(Person2), compare);
+  qsort(&b.theArray, sizeof(b)/sizeof(Person2) , sizeof(Person2), compare);
+  Person2 nullp = Person2();
+  if (a_size < b_size)
+    {
+      for (int count = 0; count < a_size - 1; count ++)
+	{
+	  if((a.theArray[count].person.year == b.theArray[count].person.year)) && (a.theArray[count].id == b.theArray[count].id))
+	    {
+	      return a.theArray[count];
+	    }
+	}
+    }
+  else
+    {
+       for (int count = 0; count < b_size - 1; count ++)
+	 {
+	  if((a.theArray[count].person.year == b.theArray[count].person.year) && (a.theArray[count].id == b.theArray[count].id))
+	    {
+	      cout << "returned " << b.theArray[count].person.firstName << endl;
+	      return b.theArray[count];
+	    }
+	}
+    }
+  return nullp;
 }//end getAncestor
 
+void FamilyTree:: convertPerson2( Person2 &x, Person &y)
+{
+  strcpy( y.firstName, x.person.firstName);
+  strcpy( y.lastName, x.person.lastName);
+  y.gender = x.person.gender;
+  y.year = x.person.year;
+  
+}

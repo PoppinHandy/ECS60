@@ -88,9 +88,9 @@ int main(int argc, char* argv[])
   FamilyTree *familyTree = new FamilyTree(families, familyCount);
   delete [] families;
   familyTree->runQueries(queries, answers, queryCount);
-  //cout << "CPU Time: " << ct.cur_CPUTime() << endl;
+  cout << "CPU Time: " << ct.cur_CPUTime() << endl;
 
-  /*for(int i = 0; i < queryCount; i++)
+  for(int i = 0; i < queryCount; i++)
     if(answerKeys[i].year == -1)
     {
       if(answers[i].year != -1)
@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
           << ',' << answerKeys[i].firstName << endl;
         cout << "Your answer:" << answers[i].year << ' ' << answers[i].lastName
           << ',' << answers[i].firstName << endl;
-	  }*/
+	  }
       return 0;
 }  // main()
 
