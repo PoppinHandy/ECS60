@@ -101,7 +101,7 @@ void QuadraticHashTable::displayHashTable(int x, int y)
   for (int i = x; i <= y; i++)
     {
       if(array[i].person.year != -1){
-	cout << "Child: " << array[i].person.firstName << endl;
+	cout << "Child: " << array[i].person.firstName  << " " << array[i].person.lastName << endl;
 	cout << "Parent1: " << array[i].parent1 << endl;
 	cout << "Parent2: " << array[i].parent2 << endl;
 	cout << "ID: " << array[i].id << endl;
