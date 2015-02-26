@@ -53,7 +53,7 @@ Person2::Person2()
 Person2::Person2(Person &p):person(p)
 { 
   id = person.year;
-  for (int i = 0; i < 3; i++)
+  for (int i = 0; i < 12; i++)
     {
       id += int(person.firstName[i]);
       id += int(person.lastName[i]);
@@ -85,11 +85,15 @@ int QuadraticHashTable::insert( Person2 & p )
 {
   // Insert x as active
   int currentPos = findPos( p );
+  if(array[currentPos].parent1 == 0)
+    {
+      array[ currentPos ] = p;
+      return currentPos;
+    }
   if( isActive( currentPos ) )
     {
       return currentPos;
     }
-  array[ currentPos ] = p;
   return currentPos;
   // Rehash; see Section 5.5
   /*if( ++currentSize > array.size( ) / 2 )
@@ -104,6 +108,7 @@ void QuadraticHashTable::displayHashTable(int x, int y)
 	cout << "Child: " << array[i].person.firstName  << " " << array[i].person.lastName << endl;
 	cout << "Parent1: " << array[i].parent1 << endl;
 	cout << "Parent2: " << array[i].parent2 << endl;
+	cout << "Year: " << array[i].person.year << endl;
 	cout << "ID: " << array[i].id << endl;
 	cout << endl;
       }
@@ -185,7 +190,12 @@ void QuadraticHashTable::makeEmpty()
 {
   currentSize = 0;
   for( int i = 0; i < array.size( ); i++ )
-    array[ i ].person.year = -1;
+    {
+      array[ i ].parent1 = 0;
+      array[ i ].parent2 = 0;
+      array[ i ].id = 0;
+      array[ i ].person.year = -1;
+    }
 }
 
 /**

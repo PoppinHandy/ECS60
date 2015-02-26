@@ -46,9 +46,11 @@ class vector
 
     const vector & operator = ( const vector & rhs );
     void resize( int newSize );
+
   private:
     int currentSize;
     Object * objects;
+    
 };
 
 #include "vector.cpp"
