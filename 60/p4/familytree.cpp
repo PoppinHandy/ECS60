@@ -18,7 +18,7 @@ FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), 1
 	{
 	  p1 = Person2(families[i].person);
 	  p2 = Person2(families[i].spouse);
-	  cout << "Inserting: " << p1.person.firstName << " " << p1.id << endl;
+	  //cout << "Inserting: " << p1.person.firstName << " " << p1.id << endl;
 	  int p1Index = hashTable.insert(p1);
 	  int p2Index = hashTable.insert(p2);
 	  if (families[i].childCount > 0)
@@ -38,17 +38,43 @@ FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), 1
 	  hashTable.insert(p1);
 	  }*/
     }//end outer for
-  hashTable.displayHashTable(100, 5000);
+  //hashTable.displayHashTable(100, 5000);
 } // FamilyTree()
+
+int compare (const void * a, const void * b)
+{
+  Person2 *ptr1 = (Person2*)a;
+  Person2 *ptr2 = (Person2*)b;
+  
+  int retval = ptr2 -> person.year - ptr1-> person.year;
+  if (retval != 0)
+    {
+      //cout << "here year" << endl;
+      return retval;
+    }
+  retval = strncmp(ptr1 -> person.lastName, ptr2 -> person.lastName, 12);
+   if (retval != 0)
+    {
+      //cout << "here last Name" << endl;
+      return retval;
+    }
+   retval = strncmp(ptr1 -> person.firstName, ptr2 -> person.firstName, 12);
+   if (retval != 0)
+    {
+      //cout << "here first Name" << endl;
+      return retval;
+    }
+   return retval;
+}//end compare
 
 void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
 {
-  Queue <Person2> q1(30);
-  Queue <Person2> q2(30);
+  PersonQueue q1;
+  PersonQueue q2;
   Person2 ppl;
   int qIndex, qSize;
   int q1_size;
-  int q2_size = 1;
+  int q2_size;
   //int qNextLevel = 0;
   //int qCurrentLevel = 1;
   for (int qc = 0; qc < queryCount; qc++){
@@ -83,10 +109,10 @@ void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
 	  }
 	q1_size ++;
       }//end while
-    for (int i = 0; i < q1_size - 1; i++)
+    /*for (int i = 0; i < q1_size; i++)
       {
 	cout <<  "Queue1: " << q1.theArray[i].person.firstName << " " << q1.theArray[i].person.lastName << endl;
-      }
+	}*/
     
     //Reset vars for next person
     qSize = 1;
@@ -113,153 +139,55 @@ void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
 	  }//end if
 	else
 	  {
-	    qIndex ++;
-	  }//end if
+	    qIndex++;
+	  }
 	q2_size ++;
       }//end while
-    for (int i = 0; i < q2_size - 1; i++)
+    /*for (int i = 0; i < q2_size; i++)
       {
 	cout <<  "Queue2: " << q2.theArray[i].person.firstName << " " << q2.theArray[i].person.lastName << endl;
-      }
+	}*/
       //Get common ancestor time
 
-    /*q1.makeEmpty();
-    q2.makeEmpty();
-    q1_size = 1;
-    q2_size = 1;
-    //inserting first query into queue
-    ppl = Person2(queries[qc].person1);
-    ppl = hashTable.findIndex(hashTable.insert(ppl));
-    q1.enqueue(ppl);
-    //cout << "ppl's id is: " << ppl.parent1 << endl;
-    // Start level-order traversal
-    while (!q1.isEmpty())
-      {
-	Person2 currentNode = q1.getFront();
-	//cout << "inserting " << currentNode.person.firstName << endl;
-	q1.dequeue();
-	qCurrentLevel --;
-	if(currentNode.person.year != -1 && currentNode.parent1 > 0 && currentNode.parent2 > 0)
-	  {
-	    q1.enqueue(hashTable.findIndex(currentNode.parent1));
-	    //cout << "inserting " << ppl.parent1 << endl;
-	    q1.enqueue(hashTable.findIndex(currentNode.parent2));
-	    //cout << "inserting " << ppl.parent2 << endl;
-	    qNextLevel += 2;
-	  }//end if
-	if(qCurrentLevel == 0)
-	  {
-	    qCurrentLevel = qNextLevel;
-	    qNextLevel = 0;
-	  }//end if
-	q1_size ++;
-      }//end while
-    for (int i = 0; i < q1_size - 1; i++){
-      cout << "Queue1: " << q1.theArray[i].person.firstName << " " << q1.theArray[i].person.lastName << endl;
-    }
-    //Reset vars for next person
-    qCurrentLevel = 1;
-    qNextLevel = 0;
-    //inserting second person into queue
-    ppl = Person2(queries[qc].person2);
-    ppl = hashTable.findIndex(hashTable.insert(ppl));
-    q2.enqueue(ppl);
-    //cout << "ppl's id is: " << ppl.parent1 << endl;
-    // Start level-order traversal
-    while (!q2.isEmpty())
-      {
-	Person2 currentNode = q2.getFront();
-	//cout << "inserting " << currentNode.person.firstName << endl;
-	q2.dequeue();
-	qCurrentLevel --;
-	if(currentNode.person.year != -1 && currentNode.parent1 > 0 && currentNode.parent2 > 0)
-	  {
-	    q2.enqueue(hashTable.findIndex(currentNode.parent1));
-	    //cout << "inserting " << ppl.parent1 << endl;
-	    q2.enqueue(hashTable.findIndex(currentNode.parent2));
-	    //cout << "inserting " << ppl.parent2 << endl;
-	    qNextLevel += 2;
-	  }//end if
-	if(qCurrentLevel == 0)
-	  {
-	    qCurrentLevel = qNextLevel;
-	    qNextLevel = 0;
-	  }//end if
-	q2_size ++;
-      }//end while
-    for (int i = 0; i < q2_size - 1; i++)
-      {
-	cout << "Queue2: " << q2.theArray[i].person.firstName << " " << q2.theArray[i].person.lastName << endl;
-      }
-      //Get common ancestor time*/
 
-
+    qsort(&(q1.theArray[0]), q1_size - 1 , sizeof(Person2), compare);
+    qsort(&(q2.theArray[0]), q2_size - 1 , sizeof(Person2), compare);
     convertPerson2(getAncestor(q1, q1_size, q2, q2_size), answers[qc]);
+    q1.theArray[q1_size].person.year = -1;
+    q2.theArray[q2_size].person.year = -1;
+
   }//end Query loop
 } // runQueries()
 
-int compare (const void * a, const void * b)
-{
-  /*if ( (*(Person2*)a).person.year < (*(Person2*)b).person.year )
-    cout << "moved ayear < byear" << endl;
-    return 1;
-  if ( (*(Person2*)a).person.year == (*(Person2*)b).person.year )
-    {
-      if(strcmp ((*(Person2*)a).person.lastName,(*(Person2*)b).person.lastName) == 0)
-	{
-	  return strcmp ((*(Person2*)a).person.firstName,(*(Person2*)b).person.firstName);
-	}
-      else
-	{
-	  return strcmp ((*(Person2*)a).person.lastName,(*(Person2*)b).person.lastName);
-	}
-    }
-  if ( (*(Person2*)a).person.year > (*(Person2*)b).person.year )
-    cout << "moved ayear < byear" << endl;
-    return -1;
-  return 0;*/
-  Person2 *ptr1 = (Person2*)a;
-  Person2 *ptr2 = (Person2*)b;
-  
-  int retval = ptr2 -> person.year - ptr1-> person.year;
-  if (retval != 0)
-    {
-      cout << "here year" << endl;
-      return retval;
-    }
-  retval = strncmp(ptr1 -> person.lastName, ptr2 -> person.lastName, 12);
-   if (retval != 0)
-    {
-         cout << "here last Name" << endl;
-      return retval;
-    }
-   retval = strncmp(ptr1 -> person.firstName, ptr2 -> person.firstName, 12);
-   if (retval != 0)
-    {
-      cout << "here first Name" << endl;
-      return retval;
-    }
-   return retval;
-}//end compare
 
-Person2& FamilyTree::getAncestor (Queue <Person2> &a, int a_size, Queue <Person2> &b, int b_size)
+Person2& FamilyTree::getAncestor (PersonQueue &a, int a_size, PersonQueue &b, int b_size)
 {
-  qsort(&(a.theArray[0]), a_size , sizeof(Person2), compare);
-  qsort(&(b.theArray[0]), b_size , sizeof(Person2), compare);
-  for (int c = 0; c < a_size - 1; c++)
+  /*for (int c = 0; c < a_size + 1; c++)
+    {
+      cout << "BEFORE SORT: " <<  a.theArray[c].person.year << ", " << "QueueA: " << a.theArray[c].person.firstName << endl;
+    }
+
+  for (int c = 0; c < b_size + 1; c++)
+    {
+      cout << "BEFORE SORT: " << b.theArray[c].person.year << ", " << "QueueB: " << b.theArray[c].person.firstName << endl;
+      }*/
+  /*for (int c = 0; c < a_size; c++)
     {
       cout << a.theArray[c].person.year << ", " << "QueueA: " << a.theArray[c].person.firstName << endl;
     }
 
-  for (int c = 0; c < b_size - 1; c++)
+  for (int c = 0; c < b_size; c++)
     {
        cout << b.theArray[c].person.year << ", " << "QueueB: " << b.theArray[c].person.firstName << endl;
-    }
+       }*/
   //Person2 nullp = Person2();
-  if (a_size < b_size)
+  /*if (a_size < b_size)
     {
-      for (int count = 0; count < a_size - 1; count ++)
+      for (int count = 0; count < a_size; count ++)
 	{
+	  if(a.theArray[count].person.year < b.theArray[count].person.year)
+	    {
+	      
 	  if((a.theArray[count].person.year == b.theArray[count].person.year) && (a.theArray[count].id == b.theArray[count].id))
 	    {
 	      cout << "returned " << a.theArray[count].person.firstName << endl;
@@ -269,7 +197,7 @@ Person2& FamilyTree::getAncestor (Queue <Person2> &a, int a_size, Queue <Person2
     }
   else
     {
-       for (int count = 0; count < b_size - 1; count ++)
+       for (int count = 0; count < b_size; count ++)
 	 {
 	  if((a.theArray[count].person.year == b.theArray[count].person.year) && (a.theArray[count].id == b.theArray[count].id))
 	    {
@@ -277,7 +205,30 @@ Person2& FamilyTree::getAncestor (Queue <Person2> &a, int a_size, Queue <Person2
 	      return b.theArray[count];
 	    }
 	}
+	}*/
+  int slowCount = 0;
+  int fastCount = 0;
+  while (slowCount != a_size || slowCount != b_size)
+    {
+      if (a.theArray[slowCount].person.year == -1 || b.theArray[slowCount].person.year == -1)
+	{
+	  return a.theArray[slowCount];
+	}
+      while (a.theArray[slowCount].person.year <= b.theArray[fastCount].person.year)
+	{
+	  if ((a.theArray[slowCount].id == b.theArray[fastCount].id))
+	    {
+	      return a.theArray[slowCount];
+	    }
+	   fastCount++;
+	}
+      if (a.theArray[slowCount].id == b.theArray[slowCount].id)
+	{
+	  return a.theArray[slowCount];
+	}
+      slowCount++;
     }
+
   
   return b.theArray[20];
 }//end getAncestor
@@ -285,12 +236,12 @@ Person2& FamilyTree::getAncestor (Queue <Person2> &a, int a_size, Queue <Person2
 void FamilyTree:: convertPerson2( Person2 &x, Person &y)
 {
   strncpy( y.firstName, x.person.firstName, sizeof(x.person.firstName));
-  cout << "Copied " << y.firstName << " from " << x.person.firstName << endl;
+  //cout << "Copied " << y.firstName << " from " << x.person.firstName << endl;
   strcpy( y.lastName, x.person.lastName);
-  cout << "Copied " << y.lastName << " from " << x.person.lastName << endl;
+  //cout << "Copied " << y.lastName << " from " << x.person.lastName << endl;
   y.gender = x.person.gender;
-  cout << "Copied " << y.gender << " from " << x.person.gender << endl;
+  //cout << "Copied " << y.gender << " from " << x.person.gender << endl;
   y.year = x.person.year;
-  cout << "Copied " << y.year << " from " << x.person.year <<  endl;
-  
+  //cout << "Copied " << y.year << " from " << x.person.year <<  endl;
+  x.person.year = -1;
 }

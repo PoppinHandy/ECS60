@@ -3,7 +3,7 @@
 
 #include "familyRunner.h"
 #include "QuadraticProbing.h"
-#include "QueueAr.h"
+#include "PersonQueue.h"
 
 class FamilyTree {
   
@@ -11,7 +11,7 @@ class FamilyTree {
   FamilyTree(Family *families, int familyCount);
   void runQueries(Query *queries, Person *answers, int queryCount);
   QuadraticHashTable hashTable;
-  Person2 & getAncestor(Queue <Person2> &a, int a_size, Queue <Person2> &b, int b_size);
+  Person2 & getAncestor(PersonQueue &a, int a_size, PersonQueue &b, int b_size);
   void convertPerson2 (Person2 &x, Person &y);
 };
 

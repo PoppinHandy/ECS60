@@ -195,6 +195,7 @@ void QuadraticHashTable::makeEmpty()
       array[ i ].parent2 = 0;
       array[ i ].id = 0;
       array[ i ].person.year = -1;
+
     }
 }
 
