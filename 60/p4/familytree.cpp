@@ -6,7 +6,7 @@
 
 using namespace std;
 
-FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), 100000)
+FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), 10000)
 {
   Person2 child;
   Person2 p1;

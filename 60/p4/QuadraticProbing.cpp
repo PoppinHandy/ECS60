@@ -154,27 +154,6 @@ int QuadraticHashTable::findPos( Person2 & p ) const
 
 
 /**
- * Remove item x from the hash table.
- */
-/*template <class HashedObj>
-void QuadraticHashTable<HashedObj>::remove( const HashedObj & x )
-{
-  int currentPos = findPos( x );
-  if( isActive( currentPos ) )
-    array[ currentPos ].info = DELETED;
-    }*/
-
-/**
- * Find item x in the hash table.
- * Return the matching item, or ITEM_NOT_FOUND, if not found.
- */
-/*int QuadraticHashTable::find(const Person2 & p ) const
-{
-  int currentPos = findPos( p );
-  return isActive( currentPos ) ? currentPos : -1;
-  }*/
-
-/**
  * Find Person in the hash table.
  * Return the matching item, or ITEM_NOT_FOUND, if not found.
  */
