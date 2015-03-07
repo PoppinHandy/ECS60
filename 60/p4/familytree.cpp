@@ -6,7 +6,7 @@
 
 using namespace std;
 
-FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), 10000)
+FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), 100000)
 {
   Person2 child;
   Person2 p1;
@@ -38,7 +38,7 @@ FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), 1
 	  hashTable.insert(p1);
 	  }*/
     }//end outer for
-  //hashTable.displayHashTable(100, 5000);
+  hashTable.displayHashTable(100, 5000);
 } // FamilyTree()
 
 int compare (const void * a, const void * b)

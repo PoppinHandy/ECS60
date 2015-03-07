@@ -84,10 +84,23 @@ QuadraticHashTable::QuadraticHashTable(const Person2 &p, int size )
 int QuadraticHashTable::insert( Person2 & p )
 {
   // Insert x as active
-  int currentPos = findPos( p );
-  if(array[currentPos].parent1 == 0)
+  int currentPos = hash(p, array.size());
+  if (strcmp (p.person.firstName, array[currentPos].person.firstName) == 0 && strcmp (p.person.lastName, array[currentPos].person.lastName) == 0 && p.person.year == array[currentPos].person.year && array[currentPos].parent1 > 0 && array[currentPos].parent2 > 0 )
+    {
+      return currentPos;
+    }
+  while(array[currentPos].person.year != -1 && array[currentPos].parent1 > 0 && array[currentPos].parent2 > 0)
+    {
+      currentPos++;
+      if (currentPos == currentSize)
+	{
+	  currentPos = 0;
+	}
+    }
+  if(array[currentPos].parent1 == 0 || array[currentPos].person.year == -1 )
     {
       array[ currentPos ] = p;
+      p.id = currentPos;
       return currentPos;
     }
   if( isActive( currentPos ) )
@@ -217,7 +230,7 @@ bool QuadraticHashTable::isActive( int currentPos ) const
 
   return hashVal;
   }*/
-
+:
 
 /**
  * A hash routine for ints.
