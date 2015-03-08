@@ -38,7 +38,7 @@ FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), 1
 	  hashTable.insert(p1);
 	  }*/
     }//end outer for
-  hashTable.displayHashTable(100, 10000);
+  //hashTable.displayHashTable(100, 10000);
 } // FamilyTree()
 
 int compare (const void * a, const void * b)
@@ -109,10 +109,10 @@ void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
 	  }
 	q1_size ++;
       }//end while
-    for (int i = 0; i < q1_size; i++)
+    /*for (int i = 0; i < q1_size; i++)
       {
 	cout <<  "Queue1: " << q1.theArray[i].person.firstName << " " << q1.theArray[i].person.lastName << ", " << q1.theArray[i].person.year << endl;
-      }
+	}*/
     
     //Reset vars for next person
     qSize = 1;
@@ -143,10 +143,10 @@ void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
 	  }
 	q2_size ++;
       }//end while
-    for (int i = 0; i < q2_size; i++)
+    /*for (int i = 0; i < q2_size; i++)
       {
 	cout <<  "Queue2: " << q2.theArray[i].person.firstName << " " << q2.theArray[i].person.lastName << ", " << q2.theArray[i].person.year << endl;
-	}
+	}*/
       //Get common ancestor time
 
 
@@ -208,13 +208,31 @@ Person2& FamilyTree::getAncestor (PersonQueue &a, int a_size, PersonQueue &b, in
 	}*/
   int slowCount = 0;
   int fastCount = 0;
-  while (slowCount != a_size || slowCount != b_size)
+  while (slowCount < a_size && fastCount < b_size)
     {
-      if (a.theArray[slowCount].person.year == -1 || b.theArray[slowCount].person.year == -1)
+      if (a.theArray[slowCount].person.year > b.theArray[fastCount].person.year)
 	{
-	  return a.theArray[slowCount];
+	  slowCount++;
 	}
-      while (a.theArray[slowCount].person.year <= b.theArray[fastCount].person.year)
+       else
+        if(a.theArray[slowCount].person.year < b.theArray[fastCount].person.year)
+          fastCount++;
+        else  
+          if(strncmp (a.theArray[slowCount].person.lastName, b.theArray[fastCount].person.lastName, 12) < 0)
+            slowCount++;
+          else
+            if(strncmp (a.theArray[slowCount].person.lastName, b.theArray[fastCount].person.lastName, 12) > 0)
+              fastCount++;
+            else
+	      if (strncmp (a.theArray[slowCount].person.firstName, b.theArray[fastCount].person.firstName, 12) < 0)
+		slowCount++;
+	      else
+		if (strncmp (a.theArray[slowCount].person.firstName, b.theArray[fastCount].person.firstName, 12) > 0)
+		  fastCount++;
+		else
+		  return a.theArray[slowCount];
+    }
+      /*else if(a.theArray[slowCount].person.year <= b.theArray[fastCount].person.year)
 	{
 	  if ((a.theArray[slowCount].id == b.theArray[fastCount].id))
 	    {
@@ -227,9 +245,9 @@ Person2& FamilyTree::getAncestor (PersonQueue &a, int a_size, PersonQueue &b, in
 	  return a.theArray[slowCount];
 	}
       slowCount++;
-    }
+      }*/
 
-  
+  b.theArray[20].person.year = -1;
   return b.theArray[20];
 }//end getAncestor
 
