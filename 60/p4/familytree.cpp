@@ -6,7 +6,7 @@
 
 using namespace std;
 
-FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), 100000)
+FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), familyCount*2)
 {
   Person2 child;
   Person2 p1;
@@ -152,7 +152,7 @@ void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
 
     qsort(&(q1.theArray[0]), q1_size - 1 , sizeof(Person2), compare);
     qsort(&(q2.theArray[0]), q2_size - 1 , sizeof(Person2), compare);
-    convertPerson2(getAncestor(q1, q1_size, q2, q2_size), answers[qc]);
+    memcpy(&answers[qc], &getAncestor(q1, q1_size, q2, q2_size), sizeof(Person));
     q1.theArray[q1_size].person.year = -1;
     q2.theArray[q2_size].person.year = -1;
 
@@ -232,21 +232,6 @@ Person2& FamilyTree::getAncestor (PersonQueue &a, int a_size, PersonQueue &b, in
 		else
 		  return a.theArray[slowCount];
     }
-      /*else if(a.theArray[slowCount].person.year <= b.theArray[fastCount].person.year)
-	{
-	  if ((a.theArray[slowCount].id == b.theArray[fastCount].id))
-	    {
-	      return a.theArray[slowCount];
-	    }
-	   fastCount++;
-	}
-      if (a.theArray[slowCount].id == b.theArray[slowCount].id)
-	{
-	  return a.theArray[slowCount];
-	}
-      slowCount++;
-      }*/
-
   b.theArray[20].person.year = -1;
   return b.theArray[20];
 }//end getAncestor

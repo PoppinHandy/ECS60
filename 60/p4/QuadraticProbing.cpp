@@ -85,9 +85,10 @@ int QuadraticHashTable::insert( Person2 & p )
 {
   // Insert x as active
   int currentPos = hash(p, array.size());
+  int collisionNum = 0;
   while(array[currentPos].person.year != -1)
     {
-      if (strcmp (p.person.firstName, array[currentPos].person.firstName) == 0 && strcmp (p.person.lastName, array[currentPos].person.lastName) == 0 && p.person.year == array[currentPos].person.year)
+      if (memcmp (&p.person, &array[currentPos].person, sizeof(Person)) == 0)
 	{
 	  if (array[currentPos].parent1 == 0 || array[currentPos].parent2 == 0)
 	    {
@@ -101,21 +102,19 @@ int QuadraticHashTable::insert( Person2 & p )
 	    }
 	}
       //cout << currentPos << endl;
-      currentPos++;
+      if (currentPos < 0) 
+	currentPos += currentSize;
       //cout << currentPos << endl;
       if (currentPos >= 100000)
 	{
 	  currentPos = 0;
 	}
+      currentPos += 2 * ++collisionNum - 1;
     }//end while
   if(array[currentPos].person.year == -1 )
     {
       p.id = currentPos;
       array[ currentPos ] = p;
-      return currentPos;
-    }
-  if( isActive( currentPos ) )
-    {
       return currentPos;
     }
   return currentPos;
