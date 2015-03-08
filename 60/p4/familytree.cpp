@@ -38,7 +38,7 @@ FamilyTree::FamilyTree(Family *families, int familyCount):hashTable(Person2(), 1
 	  hashTable.insert(p1);
 	  }*/
     }//end outer for
-  hashTable.displayHashTable(100, 5000);
+  hashTable.displayHashTable(100, 10000);
 } // FamilyTree()
 
 int compare (const void * a, const void * b)
@@ -109,10 +109,10 @@ void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
 	  }
 	q1_size ++;
       }//end while
-    /*for (int i = 0; i < q1_size; i++)
+    for (int i = 0; i < q1_size; i++)
       {
-	cout <<  "Queue1: " << q1.theArray[i].person.firstName << " " << q1.theArray[i].person.lastName << endl;
-	}*/
+	cout <<  "Queue1: " << q1.theArray[i].person.firstName << " " << q1.theArray[i].person.lastName << ", " << q1.theArray[i].person.year << endl;
+      }
     
     //Reset vars for next person
     qSize = 1;
@@ -143,10 +143,10 @@ void FamilyTree::runQueries(Query *queries, Person *answers, int queryCount)
 	  }
 	q2_size ++;
       }//end while
-    /*for (int i = 0; i < q2_size; i++)
+    for (int i = 0; i < q2_size; i++)
       {
-	cout <<  "Queue2: " << q2.theArray[i].person.firstName << " " << q2.theArray[i].person.lastName << endl;
-	}*/
+	cout <<  "Queue2: " << q2.theArray[i].person.firstName << " " << q2.theArray[i].person.lastName << ", " << q2.theArray[i].person.year << endl;
+	}
       //Get common ancestor time
 
 

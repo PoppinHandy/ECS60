@@ -85,22 +85,33 @@ int QuadraticHashTable::insert( Person2 & p )
 {
   // Insert x as active
   int currentPos = hash(p, array.size());
-  if (strcmp (p.person.firstName, array[currentPos].person.firstName) == 0 && strcmp (p.person.lastName, array[currentPos].person.lastName) == 0 && p.person.year == array[currentPos].person.year && array[currentPos].parent1 > 0 && array[currentPos].parent2 > 0 )
+  while(array[currentPos].person.year != -1)
     {
-      return currentPos;
-    }
-  while(array[currentPos].person.year != -1 && array[currentPos].parent1 > 0 && array[currentPos].parent2 > 0)
-    {
+      if (strcmp (p.person.firstName, array[currentPos].person.firstName) == 0 && strcmp (p.person.lastName, array[currentPos].person.lastName) == 0 && p.person.year == array[currentPos].person.year)
+	{
+	  if (array[currentPos].parent1 == 0 || array[currentPos].parent2 == 0)
+	    {
+	      array[currentPos].parent1 = p.parent1;
+	      array[currentPos].parent2 = p.parent2;
+	      return currentPos;
+	    }
+	  else if (array[currentPos].parent1 > 0 || array[currentPos].parent2 > 0)
+	    {
+	      return currentPos;
+	    }
+	}
+      //cout << currentPos << endl;
       currentPos++;
-      if (currentPos == currentSize)
+      //cout << currentPos << endl;
+      if (currentPos >= 100000)
 	{
 	  currentPos = 0;
 	}
-    }
-  if(array[currentPos].parent1 == 0 || array[currentPos].person.year == -1 )
+    }//end while
+  if(array[currentPos].person.year == -1 )
     {
-      array[ currentPos ] = p;
       p.id = currentPos;
+      array[ currentPos ] = p;
       return currentPos;
     }
   if( isActive( currentPos ) )
@@ -123,6 +134,7 @@ void QuadraticHashTable::displayHashTable(int x, int y)
 	cout << "Parent2: " << array[i].parent2 << endl;
 	cout << "Year: " << array[i].person.year << endl;
 	cout << "ID: " << array[i].id << endl;
+	cout << "Index: " << i << endl;
 	cout << endl;
       }
     }
@@ -230,7 +242,7 @@ bool QuadraticHashTable::isActive( int currentPos ) const
 
   return hashVal;
   }*/
-:
+
 
 /**
  * A hash routine for ints.
