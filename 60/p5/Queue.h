@@ -1,7 +1,7 @@
-#ifndef _PERSONQUEUE_H
-#define _PERSONQUEUE_H
+#ifndef _QUEUE_H
+#define _QUEUE_H
 
-#include "QuadraticProbing.h"
+#include "scheduler.h"
 
 // Queue class -- array implementation
 //
@@ -17,17 +17,15 @@
 // ******************ERRORS********************************
 // Overflow and Underflow thrown as needed
 
-class PersonQueue
+class Queue
 {
  public:
-  PersonQueue();
-
-
-
+  Queue() { makeEmpty(); }
   void makeEmpty( );
-  Person2 dequeue( );
-  void enqueue( const Person2 & x );
-  Person2 theArray[ 100000 ];
+  int dequeue( );
+  bool isEmpty();
+  void enqueue( int x );
+  int theArray[ 100000 ];
 
  private:
   int            currentSize;
