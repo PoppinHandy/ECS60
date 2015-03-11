@@ -72,7 +72,7 @@ Person2::Person2(Person &p):person(p)
  * Construct the hash table.
  */
 QuadraticHashTable::QuadraticHashTable(const Person2 &p, int size )
-  : array( size )
+  :  : array( size )
 {
   makeEmpty( );
 }
