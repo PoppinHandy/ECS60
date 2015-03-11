@@ -1,5 +1,5 @@
-p5.out: ProjectRunner.o scheduler.o 
-	g++ -Wall -ansi -g -o p5.out ProjectRunner.o scheduler.o 
+p5.out: ProjectRunner.o scheduler.o Queue.o
+	g++ -Wall -ansi -g -o p5.out ProjectRunner.o scheduler.o Queue.o
 
 
 ProjectRunner.o: ProjectRunner.cpp ProjectRunner.h scheduler.h CPUTimer.h 
@@ -8,6 +8,7 @@ ProjectRunner.o: ProjectRunner.cpp ProjectRunner.h scheduler.h CPUTimer.h
 scheduler.o: scheduler.cpp scheduler.h 
 	g++ -Wall -ansi -g -c scheduler.cpp
 
-
+Queue.o: Queue.cpp Queue.h
+	g++ -Wall -ansi -g -c Queue.cpp
 clean:
-	rm -f p5.out ProjectRunner.o scheduler.o 
+	rm -f p5.out ProjectRunner.o scheduler.o Queue.o
