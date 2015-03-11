@@ -52,7 +52,6 @@ Scheduler::Scheduler(int numJobs, int numWorkers, Job *jobs, int numPeople)
             sorted[i] = q.dequeue();
             for (int j = 0; j < count; ++j) {
                 --A[A[i]->neighbors[j]]->inedges;
-                A[i]->neighbors[j] = 0;
                 --A[i]->outedges;
                 q.enqueue(A[A[i]->neighbors[j]]->id);
             }
