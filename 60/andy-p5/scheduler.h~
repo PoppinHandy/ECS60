@@ -1,0 +1,23 @@
+#ifndef schedulerH
+#define schedulerH
+
+#include "ProjectRunner.h"
+class Vertex
+{
+ public:
+  Vertex();
+  int weight;
+  int prev [1000];
+  int next [1000];
+  int indegree;
+}; //class vertex
+
+class Scheduler
+{
+public:
+  Scheduler(int numJobs, int numWorkers, Job *jobs, int numPeople);
+  void run();
+  Vertex *array;
+}; // class Scheduler
+
+#endif
