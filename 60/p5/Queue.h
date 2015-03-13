@@ -3,34 +3,20 @@
 
 #include "scheduler.h"
 
-// Queue class -- array implementation
-//
-// CONSTRUCTION: with or without a capacity; default is 10
-//
-// ******************PUBLIC OPERATIONS*********************
-// void enqueue( x )      --> Insert x
-// void dequeue( )        --> Return and remove least recently inserted item
-// Object getFront( )     --> Return least recently inserted item
-// bool isEmpty( )        --> Return true if empty; else false
-// bool isFull( )         --> Return true if full; else false
-// void makeEmpty( )      --> Remove all items
-// ******************ERRORS********************************
-// Overflow and Underflow thrown as needed
-
 class Queue
 {
- public:
-  Queue() { makeEmpty(); }
-  void makeEmpty( );
-  int dequeue( );
-  bool isEmpty();
-  void enqueue( int x );
-  int theArray[ 100000 ];
+    public:
+        Queue() { makeEmpty(); }
+        void makeEmpty( );
+        int dequeue( );
+        bool isEmpty();
+        void enqueue( int x );
+        int theArray[ 100000 ];
 
- private:
-  int            currentSize;
-  int            front;
-  int            back;
+    private:
+        int            currentSize;
+        int            front;
+        int            back;
 };
 
 
