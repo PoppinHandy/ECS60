@@ -1,0 +1,52 @@
+#include "scheduler.h"
+#include <stdio.h>
+#include <iostream>
+using namespace std;
+
+Vertex::Vertex()
+{
+  indegree = 0;
+  weight = 0;
+}
+
+Scheduler::Scheduler(int numJobs, int numWorkers, Job *jobs, int numPeople)
+{
+  array = new Vertex [numJobs];
+  int previous = 0;
+  for (int j = 0; j < numJobs; j++)
+    {
+      array[j].weight = jobs[j].length;
+      for (int i = 0; i < jobs[j].numDependencies; i++)
+	{
+	  array[j].next[i] = jobs[j].dependencies[i];
+	  previous = jobs[j].dependencies[i];
+	  array[previous].prev[array[previous].indegree] = j;
+	  array[previous].indegree++;
+	}//inner for
+    }//outer for
+  for (int c = 0; c < numJobs; c++)
+    {
+      cout << "Job ID: " << c << endl;
+      cout << "Previous: ";
+      for (int a = 0; a < array[c].indegree; a++)
+	{
+	  cout << array[c].prev[a] << " ";
+	}
+      cout << endl;
+      cout << "Next: ";
+      for (int b = 0; b < jobs[c].numDependencies; b++)
+	{
+	  cout << array[c].next[b] << " ";
+	}
+      cout << endl;
+      cout << "Weight: " << array[c].weight << endl;
+      cout << "Indegree: " << array[c].indegree << endl;
+      cout << endl;
+    }
+} // Scheduler()
+
+void Scheduler::run()
+{
+} // run()
+
+
