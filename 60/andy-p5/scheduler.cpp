@@ -147,20 +147,20 @@ Scheduler::Scheduler(int numJobs, int numWorkers, Job *jobs, int numPeople)
 	}
       else if (sorted.theArray[d].jb.numDependencies > 0)
 	{
+	  sorted.theArray[d].latest = 1000;
 	  for (int dependent = 0; dependent < sorted.theArray[d].jb.numDependencies; dependent++)
 	    {
 	      for (int b = numJobs - 1; b > d; b--)
 		{
 		  if(sorted.theArray[b].id == sorted.theArray[d].jb.dependencies[dependent])
 		    {
-		      if (sorted.theArray[d].latest > sorted.theArray[b].latest)
+		      if (sorted.theArray[d].latest > (sorted.theArray[b].latest - sorted.theArray[b].jb.length))
 			{
-			  sorted.theArray[d].latest = sorted.theArray[b].latest;
+			  sorted.theArray[d].latest = sorted.theArray[b].latest - sorted.theArray[b].jb.length;
 			}
 		    }
 		}
 	    }
-	  sorted.theArray[d].latest -= sorted.theArray[d].jb.length;
 	}//end else if
       cout << "Job ID: " << sorted.theArray[d].id << endl;
       cout << "Latest Time: " << sorted.theArray[d].latest << endl;
