@@ -174,7 +174,7 @@ Scheduler::Scheduler(int numJobs, int numWorkers, Job *jobs, int numPeople)
 //}
   while (!sorted.isEmpty()) {
     for (int i = 0; i < numJobs; ++i) {
-      if (i == 0) {
+      if (sorted.theArray[i].indegree == 0) {
         jobs[sorted.theArray[i].id].startTime = 0;
         for (int k = 0; k < numWorkers; ++k) {
           jobs[sorted.theArray[i].id].peopleIDs[k] = k+1;
