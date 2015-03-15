@@ -13,6 +13,7 @@ class Vertex
   int prev [100];
   int indegree;
   int topNum;
+  int slack;
 }; //class vertex
 
 class Scheduler
