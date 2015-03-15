@@ -1,17 +1,18 @@
 #ifndef schedulerH
 #define schedulerH
-
 #include "ProjectRunner.h"
+#include "BinaryHeap.h"
 class Vertex
 {
  public:
   Vertex();
+  Job jb;
+  int earliest;
+  int latest;
   int id;
-  int weight;
   int prev [100];
-  int next [100];
   int indegree;
-  int outdegree;
+  int topNum;
 }; //class vertex
 
 class Scheduler
@@ -20,6 +21,7 @@ public:
   Scheduler(int numJobs, int numWorkers, Job *jobs, int numPeople);
   void run();
   Vertex *array;
+  BinaryHeap <int> heap;
 }; // class Scheduler
 
 #endif
