@@ -172,78 +172,104 @@ Scheduler::Scheduler(int numJobs, int numWorkers, Job *jobs, int numPeople)
   //for (int i = 0 ; i < numJobs; ++i) {
   //cout << sorted.theArray[i].id << endl;
   //}
-  while (!sorted.isEmpty()) {
-    for (int i = 0; i < numJobs; ++i) {
-      int ID = sorted.theArray[i].id;
-      if (sorted.theArray[i].indegree == 0) {
-        jobs[sorted.theArray[i].id].startTime = 0;
-        for (int k = 0; k < numWorkers-1; ++k) {
-          jobs[sorted.theArray[i].id].peopleIDs[k] = k+1;
-          jobs[sorted.theArray[i].id].numPeopleUsed++;
-          cout << "job: " << sorted.theArray[i].id << " ";
-          cout << "starttime: " << jobs[sorted.theArray[i].id].startTime << " ";
-          cout << "ppl used " << jobs[sorted.theArray[i].id].numPeopleUsed << " ";
-          cout << "id " << jobs[sorted.theArray[i].id].peopleIDs[k] << endl;
-          //cout << "id " << used.theArray[k] << endl;
-        }
-        if (int (ceil(jobs[sorted.theArray[i].id].length / double(jobs[sorted.theArray[i].id].numPeopleUsed))) < jobs[sorted.theArray[i].id].finishTime ) 
-	  {
-	    jobs[ID].finishTime = jobs[ID].startTime + int(ceil(jobs[ID].length / double(jobs[ID].numPeopleUsed)));
-	  }
-        //int count = jobs[sorted.theArray[i].id].numDependencies;
-        //int z = 0;
-        //while (count > 0) {
-        //jobs[jobs[sorted.theArray[i].id].dependencies[i]].peopleIDs[z] = used.dequeue();
-        //cout << jobs[jobs[sorted.theArray[i].id].dependencies[i]].peopleIDs[z] << endl;
-        //z++;
-        //count--;
-        //}
+
+  //============================================Assigning People=====================
+  for (int i = 0; i < numJobs; i++) {
+    int ID = sorted.theArray[i].id;
+    if (sorted.theArray[i].indegree == 0) {
+      jobs[ID].startTime = 0;
+      if (sorted.theArray[i].slack == 0)
+	{
+	  for (int k = 0; k < numWorkers; k++) 
+	    {
+	      jobs[ID].peopleIDs[k] = k+1;
+	      jobs[ID].numPeopleUsed++;
+	      /*cout << "job1: " << ID << " ";
+	      cout << "starttime: " << jobs[ID].startTime << " ";
+	      cout << "ppl used " << jobs[ID].numPeopleUsed << " ";*/
+	    }
+	}
+      jobs[ID].finishTime = jobs[ID].startTime + int(ceil(jobs[ID].length / double(jobs[ID].numPeopleUsed)));
+      //cout << "end time: " << jobs[sorted.theArray[i].id].finishTime  << endl;
+      for (int a = 0; a < jobs[ID].numDependencies; a++)
+	{
+	  if (jobs[ID].numPeopleUsed > 0 && jobs[jobs[ID].dependencies[a]].numPeopleUsed < numWorkers)
+	    {
+	      jobs[jobs[ID].dependencies[a]].peopleIDs[a] = jobs[ID].peopleIDs[a];
+	      jobs[jobs[ID].dependencies[a]].numPeopleUsed++;
+	    }
+	  else if (jobs[jobs[ID].dependencies[a]].numPeopleUsed < numWorkers)
+	    {
+	      jobs[jobs[ID].dependencies[a]].peopleIDs[a] = a + 1;
+	      jobs[jobs[ID].dependencies[a]].numPeopleUsed++;
+	    }
+	  if(jobs[jobs[ID].dependencies[a]].startTime < jobs[ID].finishTime)
+	    {
+	      jobs[jobs[ID].dependencies[a]].startTime = jobs[ID].finishTime;
+	    }
+	}
+    }
+      //int count = jobs[sorted.theArray[i].id].numDependencies;
+      //int z = 0;
+      //while (count > 0) {
+      //jobs[jobs[sorted.theArray[i].id].dependencies[i]].peopleIDs[z] = used.dequeue();
+      //cout << jobs[jobs[sorted.theArray[i].id].dependencies[i]].peopleIDs[z] << endl;
+      //z++;
+      //count--;
+      //}
       //cout << "id " << used.theArray[k] << endl;
       //cout << jobs[ID].length << endl;
       //cout << jobs[ID].finishTime - jobs[ID].startTime << endl;
       //cout << "finishTime: " << jobs[sorted.theArray[i].id].finishTime<< endl;
-	sorted.dequeue();
-      }
-      else {
-	for (int k = 0; k < sorted.theArray[i].indegree; i++)
-	  {
-	    if(jobs[sorted.theArray[i].id].startTime < jobs[sorted.theArray[i].prev[k]].finishTime)
-	      {
-		jobs[sorted.theArray[i].id].startTime = jobs[sorted.theArray[i].prev[k]].finishTime;
-	      } 
-	  }//end for (int k = 0;
-        jobs[sorted.theArray[i].id].finishTime = jobs[sorted.theArray[i].id].startTime + int(ceil(jobs[ID].length / double(jobs[ID].numPeopleUsed)));
-        for (int j = 0; j < numWorkers; ++j) 
-	  {
-	    if (jobs[sorted.theArray[i-1].id].numPeopleUsed <= numWorkers) 
-	      {
-		if ( sorted.theArray[i].slack==0 && j < numWorkers-1 )
-		  {
-		    jobs[sorted.theArray[i].id].peopleIDs[j] = j+1;
-		    jobs[sorted.theArray[i].id].numPeopleUsed++;
-		  }
-		else if ( sorted.theArray[i].slack != 0 && j == 0 )
-		  {
-		    jobs[sorted.theArray[i].id].peopleIDs[j] = j+1;
-		    jobs[sorted.theArray[i].id].numPeopleUsed++;
-		  }
-	      }
-	    cout << "job: " << sorted.theArray[i].id << " ";
-	    cout << "starttime: " << jobs[sorted.theArray[i].id].startTime << " ";
-	    cout << "ppl used " << jobs[sorted.theArray[i].id].numPeopleUsed << " ";
-	    cout << "id1 " << jobs[sorted.theArray[i].id].peopleIDs[j] << endl;
-	  }
-        if (int (ceil(jobs[ID].length / double(jobs[ID].numPeopleUsed))) < jobs[ID].finishTime ) 
-	  {
-	    jobs[ID].finishTime = jobs[ID].startTime + int (ceil(jobs[ID].length / double(jobs[ID].numPeopleUsed)));
-	  }
-        //cout << jobs[ID].length << endl;
-        //cout << jobs[ID].finishTime - jobs[ID].startTime << endl;
-        //cout << "finishTime: " << jobs[sorted.theArray[i].id].finishTime<<endl;
-        sorted.dequeue();
-      }
-    }
-  }//end while
+    else if (sorted.theArray[i].indegree > 0){
+      for (int k = 0; k < sorted.theArray[i].indegree; k++)
+	{
+	  if(jobs[sorted.theArray[i].id].startTime < jobs[sorted.theArray[i].prev[k]].finishTime)
+	    {
+	      jobs[sorted.theArray[i].id].startTime = jobs[sorted.theArray[i].prev[k]].finishTime;
+	    } 
+	}//end for (int k = 0;
+      for (int j = 0; j < numWorkers; j++) 
+	{
+	  if(jobs[ID].numPeopleUsed < numWorkers)
+	    {
+	      if ( sorted.theArray[i].slack==0)
+		{
+		  jobs[sorted.theArray[i].id].peopleIDs[j] = j+1;
+		  jobs[sorted.theArray[i].id].numPeopleUsed++;
+		}
+	      else if ( sorted.theArray[i].slack != 0 && j == 0 )
+		{
+		  jobs[sorted.theArray[i].id].peopleIDs[j] = j+1;
+		  jobs[sorted.theArray[i].id].numPeopleUsed++;
+		}
+	    }
+	  /*cout << "job0: " << sorted.theArray[i].id << " ";
+	  cout << "starttime: " << jobs[sorted.theArray[i].id].startTime << " ";
+	  cout << "ppl used " << jobs[sorted.theArray[i].id].numPeopleUsed << " ";*/
+	}
+      jobs[ID].finishTime = jobs[ID].startTime + int(ceil(jobs[ID].length / double(jobs[ID].numPeopleUsed)));
+      for (int a = 0; a < jobs[ID].numDependencies; a++)
+	{
+	  if(jobs[jobs[ID].dependencies[a]].numPeopleUsed < numWorkers)
+	    {
+	      jobs[jobs[ID].dependencies[a]].peopleIDs[a] = a;
+	      jobs[jobs[ID].dependencies[a]].numPeopleUsed++;
+	    }
+	  if(jobs[jobs[ID].dependencies[a]].startTime < jobs[ID].finishTime)
+	    {
+	      jobs[jobs[ID].dependencies[a]].startTime = jobs[ID].finishTime;
+	    }
+	}
+      //cout << "end time: " << jobs[sorted.theArray[i].id].finishTime  << endl;
+    }//end big else if
+    cout << "Job: " << ID << endl;
+    cout << "Start Time: " << jobs[ID].startTime << endl;
+    cout << "End Time: " << jobs[ID].finishTime << endl;
+    cout << "People Used: " << jobs[ID].numPeopleUsed << endl;
+    cout << endl;
+  }//end outermost for
+
 }//end Scheduler()
 
 void Scheduler::run()
