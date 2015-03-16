@@ -23,7 +23,7 @@
         class BinaryHeap
         {
           public:
-            explicit BinaryHeap( int capacity = 100 );
+            explicit BinaryHeap( int capacity = 5000 );
 
             bool isEmpty( ) const;
             bool isFull( ) const;

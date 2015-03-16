@@ -1,5 +1,6 @@
 #include "scheduler.h"
 #include "VertexQueue.h"
+#include "QueueAr.h"
 #include <iostream>
 #include <cmath>
 #include "string.h"
@@ -17,11 +18,16 @@ Vertex::Vertex()
 Scheduler::Scheduler(int numJobs, int numWorkers, Job *jobs, int numPeople)
 {
   array = new Vertex [numJobs];
-  int indegs[100] = {0};
+  int indegs[5000] = {0};
+  Queue <int> workpools (5000);
   VertexQueue queue;
   VertexQueue sorted;
   VertexQueue test;
   int previous = 0;
+  for (int h = 0; h < numPeople; h++)
+    {
+      workpools.enqueue(h);
+    }
   for (int j = 0; j < numJobs; j++)
   {
     memcpy (&array[j].jb, &jobs[j], sizeof(Job));
@@ -182,7 +188,7 @@ Scheduler::Scheduler(int numJobs, int numWorkers, Job *jobs, int numPeople)
 	{
 	  for (int k = 0; k < numWorkers; k++) 
 	    {
-	      jobs[ID].peopleIDs[k] = k+1;
+	      jobs[ID].peopleIDs[k] = workpools.dequeue();
 	      jobs[ID].numPeopleUsed++;
 	      /*cout << "job1: " << ID << " ";
 	      cout << "starttime: " << jobs[ID].startTime << " ";
@@ -191,36 +197,11 @@ Scheduler::Scheduler(int numJobs, int numWorkers, Job *jobs, int numPeople)
 	}
       jobs[ID].finishTime = jobs[ID].startTime + int(ceil(jobs[ID].length / double(jobs[ID].numPeopleUsed)));
       //cout << "end time: " << jobs[sorted.theArray[i].id].finishTime  << endl;
-      for (int a = 0; a < jobs[ID].numDependencies; a++)
+      for (int t = 0; t < jobs[ID].numPeopleUsed; t++)
 	{
-	  if (jobs[ID].numPeopleUsed > 0 && jobs[jobs[ID].dependencies[a]].numPeopleUsed < numWorkers)
-	    {
-	      jobs[jobs[ID].dependencies[a]].peopleIDs[a] = jobs[ID].peopleIDs[a];
-	      jobs[jobs[ID].dependencies[a]].numPeopleUsed++;
-	    }
-	  else if (jobs[jobs[ID].dependencies[a]].numPeopleUsed < numWorkers)
-	    {
-	      jobs[jobs[ID].dependencies[a]].peopleIDs[a] = a + 1;
-	      jobs[jobs[ID].dependencies[a]].numPeopleUsed++;
-	    }
-	  if(jobs[jobs[ID].dependencies[a]].startTime < jobs[ID].finishTime)
-	    {
-	      jobs[jobs[ID].dependencies[a]].startTime = jobs[ID].finishTime;
-	    }
+	  workpools.enqueue(jobs[ID].peopleIDs[t]);
 	}
     }
-      //int count = jobs[sorted.theArray[i].id].numDependencies;
-      //int z = 0;
-      //while (count > 0) {
-      //jobs[jobs[sorted.theArray[i].id].dependencies[i]].peopleIDs[z] = used.dequeue();
-      //cout << jobs[jobs[sorted.theArray[i].id].dependencies[i]].peopleIDs[z] << endl;
-      //z++;
-      //count--;
-      //}
-      //cout << "id " << used.theArray[k] << endl;
-      //cout << jobs[ID].length << endl;
-      //cout << jobs[ID].finishTime - jobs[ID].startTime << endl;
-      //cout << "finishTime: " << jobs[sorted.theArray[i].id].finishTime<< endl;
     else if (sorted.theArray[i].indegree > 0){
       for (int k = 0; k < sorted.theArray[i].indegree; k++)
 	{
@@ -231,35 +212,27 @@ Scheduler::Scheduler(int numJobs, int numWorkers, Job *jobs, int numPeople)
 	}//end for (int k = 0;
       for (int j = 0; j < numWorkers; j++) 
 	{
-	  if(jobs[ID].numPeopleUsed < numWorkers)
-	    {
+	  //if(jobs[ID].numPeopleUsed < numWorkers)
+	  //{
 	      if ( sorted.theArray[i].slack==0)
 		{
-		  jobs[sorted.theArray[i].id].peopleIDs[j] = j+1;
+		  jobs[sorted.theArray[i].id].peopleIDs[j] = workpools.dequeue();
 		  jobs[sorted.theArray[i].id].numPeopleUsed++;
 		}
-	      else if ( sorted.theArray[i].slack != 0 && j == 0 )
+	      else if ( sorted.theArray[i].slack != 0 )
 		{
-		  jobs[sorted.theArray[i].id].peopleIDs[j] = j+1;
+		  jobs[sorted.theArray[i].id].peopleIDs[j] = workpools.dequeue();
 		  jobs[sorted.theArray[i].id].numPeopleUsed++;
 		}
-	    }
+	      //}
 	  /*cout << "job0: " << sorted.theArray[i].id << " ";
 	  cout << "starttime: " << jobs[sorted.theArray[i].id].startTime << " ";
 	  cout << "ppl used " << jobs[sorted.theArray[i].id].numPeopleUsed << " ";*/
 	}
       jobs[ID].finishTime = jobs[ID].startTime + int(ceil(jobs[ID].length / double(jobs[ID].numPeopleUsed)));
-      for (int a = 0; a < jobs[ID].numDependencies; a++)
+      for (int t = 0; t< jobs[ID].numPeopleUsed; t ++)
 	{
-	  if(jobs[jobs[ID].dependencies[a]].numPeopleUsed < numWorkers)
-	    {
-	      jobs[jobs[ID].dependencies[a]].peopleIDs[a] = a;
-	      jobs[jobs[ID].dependencies[a]].numPeopleUsed++;
-	    }
-	  if(jobs[jobs[ID].dependencies[a]].startTime < jobs[ID].finishTime)
-	    {
-	      jobs[jobs[ID].dependencies[a]].startTime = jobs[ID].finishTime;
-	    }
+	  workpools.enqueue(jobs[ID].peopleIDs[t]);
 	}
       //cout << "end time: " << jobs[sorted.theArray[i].id].finishTime  << endl;
     }//end big else if
